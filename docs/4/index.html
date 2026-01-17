@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head prefix="og: https://ogp.me/ns#">
+<meta charset="utf-8">
+<title>二重ルビ。</title>
+<meta name="description" content="二重ルビ。">
+<meta name="author" content="ytyaru">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">
+<link rel="icon" href="../asset/image/author/ytyaru.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二重ルビ。">
+<meta property="og:description" content="二重ルビ。">
+<meta property="og:url" content="https://ytyaru.github.io/JS.Ruby2.20260117165252/index.html">
+<meta property="og:site_name" content="GitHub Pages">
+<!--<meta property="og:image" content="https://github.com/ytyaru/JS.Ruby2.20260117165252/blob/master/docs/asset/image/eye-catch.png?raw=true">-->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/rbem.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+<script src="../lib/van/1.5.3/nomodule/min.js"></script>
+<script src="../js/footer.js"></script>
+<script src="../lib/util/type.js"></script>
+<script src="../lib/util/test/assertion.js"></script>
+-->
+<script src="js/rbem.js"></script>
+<script src="js/main.js"></script>
+<style>
+    body { font-family: sans-serif; padding: 1em; }
+    .container { display: flex; flex-direction: column; gap: 1em; }
+    textarea#source { font-family: monospace; font-size: 1rem; width: 100%; box-sizing: border-box; }
+    table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
+    th { background-color: #f2f2f2; }
+    td:nth-child(1), td:nth-child(3) { word-break: break-all; }
+    td:nth-child(2) { line-height: 4.5; font-size: 1.2rem; }
+    td:nth-child(4) { width: 80px; text-align: center; vertical-align: middle; }
+    input[type="text"] { width: 100%; box-sizing: border-box; border: 1px solid #ddd; padding: 4px; font-family: monospace; }
+    button { cursor: pointer; }
+
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>RbEm Parser Demo</h1>
+    <div>
+      <h2>変換元テキスト</h2>
+      <textarea id="source" rows="30">
+<!-- パイプ省略形 -->
+漢字《かんじ》
+漢字《｜かんじ》
+漢字《かんじ｜カンジ》
+超電磁砲《ちょうでんじほう｜レールガン》
+
+<!-- ===== a要素 ===== -->
+漢字《https://www.google.co.jp/》
+漢字《｜https://www.google.co.jp/》
+漢字《https://www.google.co.jp/｜》
+漢字《｜｜https://www.google.co.jp/》
+漢字《https://www.google.co.jp/｜｜》
+
+<!-- ===== a in ruby ===== -->
+漢字《かんじ｜カンジ｜https://www.google.co.jp/》
+漢字《かんじ｜https://www.google.co.jp/》
+漢字《｜かんじ｜https://www.google.co.jp/》
+漢字《https://www.google.co.jp/｜かんじ》
+漢字《https://www.google.co.jp/｜｜かんじ》
+漢字《https://www.google.co.jp/｜かんじ｜カンジ》
+漢字《かんじ｜https://www.google.co.jp/｜カンジ》
+
+<!-- パイプ付与形 -->
+｜かんじじゃない《カンジ》
+｜ABC《えーびーしー》
+｜間に非漢字があってもOK《あいだにひかんじがあってもおーけー》
+
+<!-- ===== em要素 ===== -->
+《《強調》》
+
+<!-- ===== ruby + em ===== -->
+《《強調》》《うえ｜した｜https://www.google.co.jp/》
+｜《《強調》》《うえ｜した｜https://www.google.co.jp/》
+｜親文字まえ《《強調》》親文字うしろ《ルビうえ｜ルビした｜https://www.google.co.jp/》
+
+<!-- ===== HTML変換しない（原稿テキストそのまま出力する） ===== -->
+漢字《》
+漢字《   》
+｜かんじじゃない《》
+《《》》
+《《  》》
+
+<!-- エスケープ（HTML要素に変換しないこと） -->
+漢字\《かんじ》
+\｜かんじじゃない《カンジ》
+\《《強調》》
+バックスラッシュ自体: \\《《強調》》
+
+<!-- パイプ省略形と非漢字の混在テスト -->
+これは漢字《かんじ》です。
+漢字《かんじ》です。
+これは漢字《かんじ》
+
+<!-- パイプ付与形でパイプ省略形を表現できること -->
+パイプ｜付与《ふよ》です。
+パイプ省略《しょうりゃく》です。
+
+<!-- パイプ省略形とパイプ付与形と非漢字の混在テスト -->
+これは漢字《かんじ》であり｜MOJI《もじ》です。
+
+<!-- パイプ省略かつ親文字が非漢字ならHTML変換されないこと -->
+MOJI《もじ》
+
+      </textarea>
+      <button onclick="convert()" style="margin-top: 1em;">変換実行</button>
+    </div>
+
+    <div>
+      <h2>変換結果</h2>
+      <table id="result-table">
+        <thead>
+          <tr>
+            <th>原稿</th>
+            <th>表示結果</th>
+            <th>HTML文字列</th>
+            <th>📋コピー</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard(button, originalText, htmlText) {
+      const textToCopy = `${originalText}\t${htmlText}`;
+      // Clipboard API (モダンブラウザ、https環境)
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          button.textContent = 'Copied!';
+          setTimeout(() => { button.textContent = '📋コピー'; }, 2000);
+        }).catch(err => {
+          console.error('Clipboard API failed:', err);
+          fallbackCopy(textToCopy, button);
+        });
+      } else {
+        // フォールバック (http, file:// 環境)
+        fallbackCopy(textToCopy, button);
+      }
+    }
+
+    function fallbackCopy(text, button) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          button.textContent = 'Copied!';
+          setTimeout(() => { button.textContent = '📋コピー'; }, 2000);
+        } else {
+          alert('コピーに失敗しました。');
+        }
+      } catch (err) {
+        alert('コピーに失敗しました。');
+        console.error('Fallback copy failed:', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function convert() {
+      const sourceText = document.getElementById('source').value;
+      const lines = sourceText.split('\n');
+      const tbody = document.querySelector('#result-table tbody');
+      tbody.innerHTML = ''; // テーブルをクリア
+
+      lines.forEach(line => {
+        const originalText = line.trim();
+        if (originalText === '' || originalText.startsWith('<!--')) {
+          return; // 空行とコメント行はスキップ
+        }
+
+        const html = RbEm.parse(originalText);
+
+        const tr = document.createElement('tr');
+        
+        // 原稿
+        const tdOriginal = document.createElement('td');
+        const inputOriginal = document.createElement('input');
+        inputOriginal.type = 'text';
+        inputOriginal.value = originalText;
+        inputOriginal.readOnly = true;
+        tdOriginal.appendChild(inputOriginal);
+        
+        // 表示結果
+        const tdResult = document.createElement('td');
+        tdResult.innerHTML = html;
+
+        // HTML文字列
+        const tdHtml = document.createElement('td');
+        const inputHtml = document.createElement('input');
+        inputHtml.type = 'text';
+        inputHtml.value = html;
+        inputHtml.readOnly = true;
+        tdHtml.appendChild(inputHtml);
+
+        // コピーボタン
+        const tdCopy = document.createElement('td');
+        const copyButton = document.createElement('button');
+        copyButton.textContent = '📋コピー';
+        copyButton.onclick = () => copyToClipboard(copyButton, originalText, html);
+        tdCopy.appendChild(copyButton);
+
+        tr.append(tdOriginal, tdResult, tdHtml, tdCopy);
+        tbody.appendChild(tr);
+      });
+    }
+    // 初期表示
+    convert();
+  </script>
+
+</body>
+</html>
+<!-- https://coliss.com/articles/build-websites/operation/work/html-template-for-web-apps-or-sites.html -->
+<!-- https://coliss.com/articles/build-websites/operation/work/html5-template-for-2018.html -->

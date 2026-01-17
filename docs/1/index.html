@@ -1,0 +1,315 @@
+<!doctype html>
+<html>
+<head prefix="og: https://ogp.me/ns#">
+<meta charset="utf-8">
+<title>二重ルビ。</title>
+<meta name="description" content="二重ルビ。">
+<meta name="author" content="ytyaru">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">
+<link rel="icon" href="../asset/image/author/ytyaru.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二重ルビ。">
+<meta property="og:description" content="二重ルビ。">
+<meta property="og:url" content="https://ytyaru.github.io/JS.Ruby2.20260117165252/index.html">
+<meta property="og:site_name" content="GitHub Pages">
+<!--<meta property="og:image" content="https://github.com/ytyaru/JS.Ruby2.20260117165252/blob/master/docs/asset/image/eye-catch.png?raw=true">-->
+<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../lib/van/1.5.3/nomodule/min.js"></script>
+<script src="../js/footer.js"></script>
+<script src="../lib/util/type.js"></script>
+<script src="../lib/util/test/assertion.js"></script>
+<script src="js/main.js"></script>
+</head>
+<body>
+    <!--
+    <main></main>
+    <footer></footer>
+    -->
+<div id="content">
+  やあ、｜伸縮自在の愛《バンジーガム｜しんしゅくじざいのあい》のような表現や、魔術師《ヒソカ》といった表現が簡単に書けます。
+  
+  漢字《かんじ》のように冒頭のパイプを省略したり、漢字《｜カンジ》のように下だけに配置することもできます。
+
+  ALPHABET《あふふぁべっと》はパイプないからHTML変換されず、｜ALPHABET《あふふぁべっと》はパイプあるからHTML変換される。
+
+　伸縮自在の愛《バンジーガム｜しんしゅくじざいのあい》は愛の字にルビがかかってしまうが、それが仕様。パイプ省略形と判断されてしまう。
+
+  <!-- 1. 基本（上下両方・上のみ・下のみ） -->
+  ｜伸縮自在の愛《バンジーガム｜しんしゅくじざいのあい》
+  魔術師《ヒソカ》
+  漢字《｜かんじ》
+
+  <!-- 2. パイプ省略（漢字のみ・英数字のみ） -->
+  黄金体験《ゴールド・エクスペリエンス｜おうごんたいけん》
+  ｜HEAVEN'S DOOR《ヘブンズ・ドアー》
+  HEAVEN'S DOOR《ヘブンズ・ドアー》 <!-- 変換されないはず -->
+
+  <!-- 3. エッジケース（記号、短い、長い） -->
+  ｜A《｜えー》 <!-- 1文字親文字の下ルビ -->
+  佐々木《ささき》 <!-- 踊り字「々」を含む漢字 -->
+  阿部ヶ原《あべがはら》 <!-- 「ヶ」を含む漢字 -->
+  漢字《……｜！？》 <!-- ルビに記号を含む -->
+  ｜あいうえお《アイウエオ》 <!-- ひらがな親文字（｜あり） -->
+
+  <!-- 4. 連続・隣接テスト -->
+  漢字《かん》漢字《じ》 <!-- ルビの連続 -->
+  （｜親文字《ルビ》） <!-- 括弧との隣接 -->
+
+  <!-- 5. 誤爆防止（変換されないべきもの） -->
+  これは《《二重山括弧》》です。 <!-- 親文字が漢字でない・｜なし -->
+  名前《 》 <!-- 空ルビ -->
+  あいうえお《かきくけこ》 <!-- 非漢字・｜なし -->
+
+<!-- 6. 強調（傍点）テスト -->
+《《強調したい言葉》》が傍点になるか。
+《《》》 <!-- 空の強調は無視されるべき -->
+《《 》》 <!-- スペースのみの強調も無視されるべき -->
+
+《《　》》 <!-- 全角スペースのみの強調も無視されるべき -->
+《《
+》》
+
+漢字《
+かんじ》
+
+漢字《かんじ
+》
+
+漢字《かん
+じ》
+
+<!-- 7. エスケープテスト -->
+\｜エスケープされた親文字《ルビ》 <!-- ルビにならない -->
+漢字\《エスケープされたルビ》 <!-- ルビにならない -->
+\\｜二重エスケープ《ルビ》 <!-- 最初の\が残り、ルビ変換される（\｜親文字...） -->
+
+<!-- 新エスケープテスト -->
+\｜伸縮自在の愛《バンジーガム》 <!-- 全くルビにならないはず -->
+漢字\《かんじ》 <!-- 全くルビにならないはず -->
+｜\《《強調》》 <!-- 傍点処理自体をエスケープできるか -->
+\《《強調》》
+
+<!-- 8. 空ルビ・スペースルビの再確認 -->
+名前《》
+名前《　》
+名前《 　 》 <!-- これらはすべて変換されずそのまま出力されるべき -->
+
+<!-- 9. 複合テスト -->
+｜《《強調された親文字》》《ルビ》 <!-- 強調が先に処理され、その結果に対してルビがかかるか -->
+
+</div>
+
+<style>
+/* 上下ルビ表示のためのCSS */
+ruby.under { ruby-position: under; }
+ruby.over { ruby-position: over; }
+#content { line-height: 4.5; font-size: 1.2rem; padding: 2em; }
+/* 傍点（ごま点）の設定 */
+em.bouten {
+  font-style: normal;
+  text-emphasis: filled sesame; /* 2026年主要ブラウザ標準対応 */
+  -webkit-text-emphasis: filled sesame;
+}
+</style>
+
+<script>
+function applyCustomRuby(selector) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+  
+  let html = container.innerHTML;
+
+  // 1. エスケープ処理 ( \｜ や \《 を一時的なマーカーに置換)
+//  html = html.replace(/\\(｜|《|》)/g, (match, p1) => `__ESC_${p1.charCodeAt(0)}__`);
+
+  // 修正後のエスケープ処理
+  // 「\」に続く「｜」または「《」を、その後のルビ構造が壊れるように保護する
+  html = html.replace(/\\(｜|《)/g, (match, p1) => `__ESC_${p1.charCodeAt(0)}__`);
+  console.log(html);
+
+  // 2. 強調（傍点）: 《《...》》を <em> に変換 (空でない場合のみ)
+  html = html.replace(/《《([^》\s]+)》》/g, '<em class="bouten">$1</em>');
+
+  // 3. ルビ変換 (空ルビ 《 》 はマッチしないよう [^》\s] を使用)
+  // 漢字判定は Unicode property を使用して網羅
+  const rubyRegex = /｜([^｜\n《》]+)《([^》\s]+)》|([\u4E00-\u9FFF々〇ヶ]+)《([^》\s]+)》/g;
+
+  html = html.replace(rubyRegex, (match, p1, r1, p2, r2) => {
+    const parent = p1 || p2;
+    const content = r1 || r2;
+    if (!parent || !content) return match;
+
+    const parts = content.split('｜');
+
+    // 下のみ: 《｜下ルビ》
+    if (parts.length > 1 && parts.at(0) === "") {
+      const under = parts.at(1);
+      return `<ruby class="under">${parent}<rt>${under}</rt></ruby>`;
+    }
+    
+    // 上下両方: 《上ルビ｜下ルビ》
+    if (parts.length > 1) {
+      const over = parts.at(0);
+      const under = parts.at(1);
+      return `<ruby class="under"><ruby class="over">${parent}<rt>${over}</rt></ruby><rt aria-hidden="true">${under}</rt></ruby>`;
+    }
+
+    // 上のみ
+    return `<ruby class="over">${parent}<rt>${content}</rt></ruby>`;
+  });
+
+  // 4. エスケープの復元
+  html = html.replace(/__ESC_(\d+)__/g, (match, p1) => String.fromCharCode(p1));
+
+  container.innerHTML = html;
+}
+
+// 実行
+applyCustomRuby('#content');
+
+
+
+/*
+function applyCustomRuby(selector) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+  
+  let html = container.innerHTML;
+
+  // 1. エスケープ処理 (｜と《 を別々に保護)
+  html = html.replace(/\\｜/g, '__ESC_P__');
+  html = html.replace(/\\《/g, '__ESC_E__');
+
+  // 2. 強調（傍点）処理
+  html = html.replace(/《《([^》\s]+)》》/g, '<em class="bouten">$1</em>');
+
+  // 3. ルビ & URL 処理
+  // 正規表現: パイプあり、または漢字のみ
+  const rubyRegex = /｜([^｜\n《》]+)《([^》\s]+)》|([\u4E00-\u9FFF々〇ヶ]+)《([^》\s]+)》/g;
+
+  html = html.replace(rubyRegex, (match, p1, r1, p2, r2) => {
+    let parent = p1 || p2;
+    let content = r1 || r2;
+
+    // 親文字にエスケープマーカーが含まれている場合は、エスケープを優先するためマッチを破棄
+    if (parent.includes('__ESC_')) return match;
+
+    const parts = content.split('｜');
+    let url = null;
+    const rubyParts = [];
+
+    // URLの抽出 (httpで始まる要素を分離)
+    parts.forEach(part => {
+      if (/^https?:\/\//.test(part)) {
+        url = part;
+      } else {
+        rubyParts.push(part);
+      }
+    });
+
+    let resultHtml = "";
+
+    // ルビの組み立て
+    if (rubyParts.length === 0) {
+      // ルビ要素がなく、URLのみの場合
+      resultHtml = parent;
+    } else if (rubyParts.length === 1) {
+      // 上のみ（または下のみ判定）
+      if (rubyParts[0] === "" && parts[0] === "") { 
+        // 《｜URL》のようなケースでrubyPartsが1つの場合
+        resultHtml = parent;
+      } else if (content.startsWith('｜') && rubyParts.length === 1) {
+        // 《｜ルビ》形式
+        resultHtml = `<ruby class="under">${parent}<rt>${rubyParts[0]}</rt></ruby>`;
+      } else {
+        // 通常の上ルビ
+        resultHtml = `<ruby class="over">${parent}<rt>${rubyParts[0]}</rt></ruby>`;
+      }
+    } else {
+      // 上下両方
+      const over = rubyParts[0];
+      const under = rubyParts[1];
+      resultHtml = `<ruby class="under"><ruby class="over">${parent}<rt>${over}</rt></ruby><rt aria-hidden="true">${under}</rt></ruby>`;
+    }
+
+    // URLがあれば全体を <a> で囲む
+    if (url) {
+      resultHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer">${resultHtml}</a>`;
+    }
+
+    return resultHtml;
+  });
+
+  // 4. エスケープの復元
+  html = html.replace(/__ESC_P__/g, '｜');
+  html = html.replace(/__ESC_E__/g, '《');
+
+  container.innerHTML = html;
+}
+*/
+
+
+/*
+function applyCustomRuby(selector) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+  
+  let html = container.innerHTML;
+
+  // 1. エスケープ処理 ( \｜ や \《 を一時的なマーカーに置換)
+//  html = html.replace(/\\(｜|《|》)/g, (match, p1) => `__ESC_${p1.charCodeAt(0)}__`);
+
+  // 修正後のエスケープ処理
+  // 「\」に続く「｜」または「《」を、その後のルビ構造が壊れるように保護する
+  html = html.replace(/\\(｜|《)/g, (match, p1) => `__ESC_${p1.charCodeAt(0)}__`);
+  console.log(html);
+
+  // 2. 強調（傍点）: 《《...》》を <em> に変換 (空でない場合のみ)
+  html = html.replace(/《《([^》\s]+)》》/g, '<em class="bouten">$1</em>');
+
+  // 3. ルビ変換 (空ルビ 《 》 はマッチしないよう [^》\s] を使用)
+  // 漢字判定は Unicode property を使用して網羅
+  const rubyRegex = /｜([^｜\n《》]+)《([^》\s]+)》|([\u4E00-\u9FFF々〇ヶ]+)《([^》\s]+)》/g;
+
+  html = html.replace(rubyRegex, (match, p1, r1, p2, r2) => {
+    const parent = p1 || p2;
+    const content = r1 || r2;
+    if (!parent || !content) return match;
+
+    const parts = content.split('｜');
+
+    // 下のみ: 《｜下ルビ》
+    if (parts.length > 1 && parts.at(0) === "") {
+      const under = parts.at(1);
+      return `<ruby class="under">${parent}<rt>${under}</rt></ruby>`;
+    }
+    
+    // 上下両方: 《上ルビ｜下ルビ》
+    if (parts.length > 1) {
+      const over = parts.at(0);
+      const under = parts.at(1);
+      return `<ruby class="under"><ruby class="over">${parent}<rt>${over}</rt></ruby><rt aria-hidden="true">${under}</rt></ruby>`;
+    }
+
+    // 上のみ
+    return `<ruby class="over">${parent}<rt>${content}</rt></ruby>`;
+  });
+
+  // 4. エスケープの復元
+  html = html.replace(/__ESC_(\d+)__/g, (match, p1) => String.fromCharCode(p1));
+
+  container.innerHTML = html;
+}
+
+// 実行
+applyCustomRuby('#content');
+*/
+</script>
+
+
+
+</body>
+</html>
+<!-- https://coliss.com/articles/build-websites/operation/work/html-template-for-web-apps-or-sites.html -->
+<!-- https://coliss.com/articles/build-websites/operation/work/html5-template-for-2018.html -->
