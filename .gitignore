@@ -2,3 +2,7 @@ key.pem
 cert.pem
 localhost.pem
 *.pem
+bin/
+lib64/
+lib/
+include/
