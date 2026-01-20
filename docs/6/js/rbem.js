@@ -1,7 +1,9 @@
+// RbEm.js
 export class RbEm {
   /**
    * 指定されたテキストを解析し、HTML文字列に変換します。
    * @param {string} text - 変換対象の元原稿テキスト。
+   * @throws {Error} インライン要素の構文内に改行文字が含まれている場合。
    * @returns {string} 変換後のHTML文字列。
    */
   static parse(text) {
@@ -22,18 +24,19 @@ export class RbEm {
       .replace(/\\》/g, placeholders.escR)
       .replace(/\\｜/g, placeholders.escP);
 
-    // 優先順位を考慮した正規表現
+    // 改行を含まないように正規表現を修正
     const regex = new RegExp([
-      // 1. パイプ付与形: ｜親文字《ルビ》
-      `(｜)((?:《《[^》]+?》》|[^《\\n])+)《([^》]*)》`,
-      // 2. 強調＋ルビ形: 《《強調》》《ルビ》
-      `(《《[^》]+?》》)《([^》]*)》`,
-      // 3. パイプ省略形: 漢字《ルビ》
-      // ★★★ 親文字の定義を実用的なものに更新 ★★★
-      `([一-龠〇々〆ヶヵ仝〻〼ヿ]+)《(?!《)([^》]*)》`,
-      // 4. 強調のみ: 《《強調》》
+      `(｜)((?:《《[^》\\n]+?》》|[^《\\n])+)《([^》\\n]*)》`,
+      `(《《[^》\\n]+?》》)《([^》\\n]*)》`,
+      `([一-龠〇々〆ヶヵ仝〻〼ヿ]+)《(?!《)([^》\\n]*)》`,
       `《《([^》\\n]*?)》》`
     ].join('|'), 'g');
+
+    // 先に改行エラーをチェックする
+    const syntaxErrorRegex = /(?:[一-龠〇々〆ヶヵ仝〻〼ヿ]+|｜(?:《《[^》]+?》》|[^《])+?|《《[^》]+?》》)《[^》]*\n[^》]*》|《《[^》]*\n[^》]*》》/g;
+    if (syntaxErrorRegex.test(processedText)) {
+      throw new Error('インライン要素の構文内に改行文字を含めることはできません。');
+    }
 
     processedText = processedText.replace(regex, (
       match,
@@ -42,18 +45,20 @@ export class RbEm {
       shortBase, shortRuby,
       emphasis
     ) => {
+      // --- 強調 ---
       if (emphasis !== undefined) {
-        if (emphasis.trim() === '') return '《《》》';
+        if (emphasis.trim() === '') return match; // 空白のみの場合は変換しない
         return `<em class="bouten">${emphasis}</em>`;
       }
 
+      // --- ルビ ---
       const base = pipeBase || emBase || shortBase;
       const rubyContent = pipeRuby || emRuby || shortRuby;
 
       if (rubyContent === undefined || rubyContent.trim() === '') return match;
 
       const parsedBase = base.replace(/《《([^》\n]*?)》》/g, (m, em) =>
-        em.trim() === '' ? '《《》》' : `<em class="bouten">${em}</em>`
+        em.trim() === '' ? match : `<em class="bouten">${em}</em>`
       );
 
       const parts = rubyContent.split(/\||｜/);
