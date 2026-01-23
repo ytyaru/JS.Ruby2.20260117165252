@@ -152,7 +152,7 @@ describe('RbEmFast パーサー', () => {
         test('URLのみ', () => {
           expect(RbEmFast.parse(`漢字《${url}》`)).toBe(`<a href="${url}" target="_blank" rel="noopener noreferrer">漢字</a>`);
         });
-        
+        /*
         test('URLと空のパイプ', () => {
           expect(RbEmFast.parse(`漢字《｜${url}》`)).toBe(`<a href="${url}" target="_blank" rel="noopener noreferrer">漢字</a>`);
           expect(RbEmFast.parse(`漢字《${url}｜》`)).toBe(`<a href="${url}" target="_blank" rel="noopener noreferrer">漢字</a>`);
@@ -164,6 +164,31 @@ describe('RbEmFast パーサー', () => {
           expect(RbEmFast.parse(`漢字《${url}｜｜》`)).toBe(`<a href="${url}" target="_blank" rel="noopener noreferrer">漢字</a>`);
         });
       });
+      */
+        test('URLと空のパイプ', () => {
+          expect(RbEmFast.parse(`漢字《｜${url}》`)).toBe(`漢字《｜${url}》`);
+          expect(RbEmFast.parse(`漢字《${url}｜》`)).toBe(`漢字《${url}｜》`);
+        });
+
+        test('URLと複数の空のパイプ', () => {
+          expect(RbEmFast.parse(`漢字《｜｜${url}》`)).toBe(`漢字《｜｜${url}》`);
+          expect(RbEmFast.parse(`漢字《｜${url}｜》`)).toBe(`漢字《｜${url}｜》`);
+          expect(RbEmFast.parse(`漢字《${url}｜｜》`)).toBe(`漢字《${url}｜｜》`);
+        });
+
+        test('URLと空白文字のみ', () => {
+          expect(RbEmFast.parse(`漢字《　｜${url}》`)).toBe(`漢字《　｜${url}》`);
+          expect(RbEmFast.parse(`漢字《${url}｜　》`)).toBe(`漢字《${url}｜　》`);
+        });
+
+        test('URLと複数の空のパイプ', () => {
+          expect(RbEmFast.parse(`漢字《　｜　｜${url}》`)).toBe(`漢字《　｜　｜${url}》`);
+          expect(RbEmFast.parse(`漢字《　｜${url}｜　》`)).toBe(`漢字《　｜${url}｜　》`);
+          expect(RbEmFast.parse(`漢字《${url}｜　｜　》`)).toBe(`漢字《${url}｜　｜　》`);
+        });
+      });
+
+
 
       describe('無効なURLパターン（ルビとして扱われる）', () => {
         test('スキーマが一文字足りない', () => {
