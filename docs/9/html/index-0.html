@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head prefix="og: https://ogp.me/ns#">
+<meta charset="utf-8">
+<title>二重ルビ。</title>
+<meta name="description" content="二重ルビ。">
+<meta name="author" content="ytyaru">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">
+<link rel="icon" href="../asset/image/author/ytyaru.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二重ルビ。">
+<meta property="og:description" content="二重ルビ。">
+<meta property="og:url" content="https://ytyaru.github.io/JS.Ruby2.20260117165252/index.html">
+<meta property="og:site_name" content="GitHub Pages">
+<!--<meta property="og:image" content="https://github.com/ytyaru/JS.Ruby2.20260117165252/blob/master/docs/asset/image/eye-catch.png?raw=true">-->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/rbem.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../lib/van/1.5.3/nomodule/min.js"></script>
+<script src="../js/footer.js"></script>
+<script src="../lib/util/type.js"></script>
+<script src="../lib/util/test/assertion.js"></script>
+<script src="js/rbem.js"></script>
+<script src="js/main.js"></script>
+<style>
+</style>
+</head>
+<body>
+  <h1>RbEm Parser Demo</h1>
+  <h2>変換元テキスト</h2>
+  <textarea id="source" rows="15" cols="80">
+漢字《かんじ》
+漢字《｜かんじ》
+漢字《かんじ｜カンジ》
+超電磁砲《ちょうでんじほう｜レールガン》
+
+漢字《https://www.google.co.jp/》
+漢字《かんじ｜カンジ｜https://www.google.co.jp/》
+漢字《https://www.google.co.jp/｜かんじ｜カンジ》
+
+｜パイプ付与形《ぱいぷふよけい》
+
+《《これは強調です》》
+
+《《強調された親文字》》《うえ｜した｜https://www.google.co.jp/》
+｜《《これも強調》》《ルビ》
+
+変換しないパターン: 漢字《》 or 漢字《  》
+エスケープ処理: 漢字\《かんじ》 と \《《強調》》
+  </textarea>
+  <br>
+  <button onclick="convert()">変換</button>
+  <h2>変換後HTML</h2>
+  <div id="content"></div>
+
+  <script src="RbEm.js"></script>
+  <script>
+    function convert() {
+      const sourceText = document.getElementById('source').value;
+      const html = RbEm.parse(sourceText);
+      document.getElementById('content').innerHTML = html;
+    }
+    // 初期表示
+    convert();
+  </script>
+</body>
+</html>
+<!-- https://coliss.com/articles/build-websites/operation/work/html-template-for-web-apps-or-sites.html -->
+<!-- https://coliss.com/articles/build-websites/operation/work/html5-template-for-2018.html -->
