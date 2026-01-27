@@ -38,6 +38,7 @@ jaml/
                         math-ml/
                         mermaid/
                 inline/
+                    invisible.js
                     space.js
                     newline.js
                     control.js
