@@ -1,0 +1,19 @@
+@charset "utf-8";
+body { font-family: sans-serif; }
+#content {
+  border: 1px solid #ccc;
+  padding: 2em;
+  line-height: 4.5;
+  font-size: 1.2rem;
+  white-space: pre-wrap; /* 改行を維持 */
+}
+/* 上下ルビ表示のためのCSS */
+ruby.under { ruby-position: under; }
+ruby.over { ruby-position: over; }
+/* 傍点（ごま点）の設定 */
+em.bouten {
+  font-style: normal;
+  text-emphasis: filled sesame;
+  -webkit-text-emphasis: filled sesame;
+}
+

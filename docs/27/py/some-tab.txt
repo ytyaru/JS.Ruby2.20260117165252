@@ -1,0 +1,6 @@
+abc
+	def.txt
+
+x
+	y
+		z
