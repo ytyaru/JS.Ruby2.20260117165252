@@ -392,4 +392,4 @@ export const invisibleChars = new CharGroup([
   0xE0001,
   [0xE0020, 0xE007F],
   [0xE0100, 0xE01EF]
-], {ja:'マージされた不可視文字', en:'InvisibleChars'});
+], {ja:'統合不可視文字', en:'InvisibleChars'});
