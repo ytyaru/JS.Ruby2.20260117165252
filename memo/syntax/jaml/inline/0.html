@@ -1,0 +1,25 @@
+<style>
+body { font-family: sans-serif; }
+/* 上下ルビ表示のためのCSS */
+ruby.under { ruby-position: under; }
+ruby.over { ruby-position: over; }
+/* 傍点（ごま点）の設定 */
+em {
+  font-style: normal;
+  text-emphasis: filled sesame;
+  -webkit-text-emphasis: filled sesame;
+}
+</style>
+
+<ul>
+<li>em:<em>傍点</em>
+<li>ruby:<ruby>傍点<rt>﹅﹅</rt></ruby>
+<li>ruby+em:<ruby>前<rt>まえ</rt><em>傍点</em>後<rt>あと</rt></ruby>
+<li>ruby:<ruby>前<rt>まえ</rt>傍点<rt>﹅﹅</rt>後<rt>あと</rt></ruby>
+<li>ruby,em,ruby:<ruby>前<rt>まえ</rt></ruby><em>傍点</em><ruby>後<rt>あと</rt></ruby>
+<li>ruby+em:<ruby><em>傍点</em><rt>ぼうてん</rt></ruby>
+<li>ruby+em:<ruby class="under"><em>傍点</em><rt>ぼうてん</rt></ruby>
+</ul>
+
+
+
