@@ -1,17 +1,15 @@
 #!/bin/bash
 
+# エラーが発生した時点でスクリプトを終了させる
 set -e
+
+# スクリプトの場所を基準にカレントディレクトリを移動
 cd "$(dirname "$0")"
 
 # ヘルプが要求された場合の処理
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-    # 1. プロジェクトルートを検索パスの最優先(0番)に追加
-    # 2. helpディレクトリがある場所(src)もパスに追加
-    # 3. 組み込みのhelpと衝突しないよう、絶対パス指定でインポートを試みる
-    python3 -c "import sys, os; \
-                root = os.getcwd(); \
-                sys.path.insert(0, root); \
-                sys.path.insert(0, os.path.join(root, 'src')); \
+    # カレントディレクトリをsys.pathに追加してhelpディレクトリを認識させる
+    python3 -c "import sys, os; sys.path.insert(0, os.getcwd()); \
                 from help.build import HELP_DESCRIPTION, HELP_EPILOG; \
                 print('\n' + HELP_DESCRIPTION + '\n' + HELP_EPILOG)"
     exit 0

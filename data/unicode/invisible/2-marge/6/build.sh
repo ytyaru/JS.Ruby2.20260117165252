@@ -13,7 +13,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
                 sys.path.insert(0, root); \
                 sys.path.insert(0, os.path.join(root, 'src')); \
                 from help.build import HELP_DESCRIPTION, HELP_EPILOG; \
-                print('\n' + HELP_DESCRIPTION + '\n' + HELP_EPILOG)"
+                print(HELP_DESCRIPTION + '\n' + HELP_EPILOG, end='')"
     exit 0
 fi
 

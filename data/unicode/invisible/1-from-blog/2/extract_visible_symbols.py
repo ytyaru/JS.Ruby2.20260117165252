@@ -55,11 +55,13 @@ def main():
                 visible_codes.append(code)
         except ValueError: continue
 
-    with open("4.tsv", "w", encoding="utf-8") as f:
+    #with open("4.tsv", "w", encoding="utf-8") as f:
+    with open("3-1-auto.tsv", "w", encoding="utf-8") as f:
         for code in sorted(visible_codes):
             f.write(f"0x{code:04X}\n")
             
-    print(f"完了: 4.tsv を作成しました（抽出数: {len(visible_codes)} 文字）。")
+    #print(f"完了: 4.tsv を作成しました（抽出数: {len(visible_codes)} 文字）。")
+    print(f"完了: 3-1-auto.tsv を作成しました（抽出数: {len(visible_codes)} 文字）。")
 
 if __name__ == "__main__":
     main()

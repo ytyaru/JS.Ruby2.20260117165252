@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 from help.category import HELP_SUB_EPILOG
+from help.merge_tsv_param import HELP_PARAM_SUMMARY # 追加
 
 HELP_DESCRIPTION = "Unicode不可視文字ライブラリ構築ツール\n各工程（分類・マージ・JS生成）を一括で実行します。"
 
 HELP_EPILOG = """
 全工程の流れ:
-  1. src/categorize-tsv.py : 由来別に3分類し dist/db/categorize/ へ出力
-  2. src/merge-tsv.py      : 条件に基づきフィルタリングし dist/db/merge.tsv を作成
-  3. src/generate-js.py    : merge.tsv から dist/invisible-chars.js を生成
+  1. src/categorize_tsv.py : 由来別に3分類し dist/db/categorize/ へ出力
+  2. src/merge_tsv.py      : 条件に基づきフィルタリングし dist/db/merge.tsv を作成
+  3. src/generate_js.py    : merge.tsv から dist/invisible-chars.js を生成
 
 主な入出力ファイル一式:
   src/db/                 [入力]
@@ -21,5 +22,5 @@ HELP_EPILOG = """
         both.tsv            両方に存在
       merge.tsv           [出力] 最終統合リスト
     invisible-chars.js    [出力] JavaScript CharGroup定義
-""" + HELP_SUB_EPILOG
+""" + HELP_PARAM_SUMMARY + HELP_SUB_EPILOG # 連結
 
