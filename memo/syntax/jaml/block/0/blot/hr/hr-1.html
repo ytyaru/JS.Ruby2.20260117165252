@@ -1,0 +1,48 @@
+<style>
+:root {
+    --color-fg:#000;
+    --color-bg:#ddd;
+    --color-sub-fg:#888;
+}
+.pattern-hr {
+  border: none;           /* デフォルトの線を消す */
+  height: 1.5em;          /* 高さを確保 */
+  overflow: hidden;       /* はみ出した文字を隠す */
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.pattern-hr::before {
+  /* JSを使わず、CSSの演算のみで「十分な長さ」を生成 */
+  /* 文字パターンを20回繰り返す（画面幅に合わせて調整可） */
+  content: 
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content)
+    attr(data-content) attr(data-content) attr(data-content) attr(data-content) attr(data-content);
+  
+  white-space: nowrap;    /* 改行を禁止 */
+  position: absolute;
+  left: 0;
+  
+  /* offset（全角スペース）の適用：letter-spacingやpaddingで調整 */
+  /* ここでは、data-offsetの数だけ左右に余白を作る例 */
+  padding: 0 calc(attr(data-offset integer, 0) * 1em);
+}
+</style>
+
+<p>話題A</p>
+<hr class="with-text" data-content="任意の内容">
+<!-- data-contentにパターン、data-offsetに全角スペースの数を指定 -->
+<hr class="pattern-hr" data-content="★☆" data-offset="3">
+<p>話題B</p>
+

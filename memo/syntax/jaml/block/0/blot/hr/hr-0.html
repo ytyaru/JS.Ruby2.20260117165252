@@ -1,0 +1,45 @@
+<style>
+:root {
+    --color-fg:#000;
+    --color-bg:#ddd;
+    --color-sub-fg:#888;
+}
+body {
+    color: var(--color-fg);
+    background: var(--color-bg);
+}
+hr.with-text {
+  border: 0;                /* デフォルトの線を消す */
+  text-align: center;       /* テキストを中央に */
+  height: 1.5em;            /* 文字が表示される高さを確保 */
+  line-height: 1.5em;
+  color: var(--color-sub-fg);              /* 文字色 */
+  position: relative;       /* 疑似要素の親にする */
+}
+
+/* 文字の両側の線を設定 */
+hr.with-text::before {
+  content: "";              /* 内容は空 */
+  position: absolute;
+  top: 50%;                 /* 中央に配置 */
+  left: 0;
+  width: 100%;              /* 線を横いっぱいに */
+  height: 1px;              /* 線の太さ */
+  background: var(--color-sub-fg);         /* 線の色 */
+  z-index: 1;               /* 文字の下に隠す */
+}
+
+/* 文字部分のスタイル */
+hr.with-text::after {
+  content: attr(data-content); /* HTMLのdata-contentの内容を表示 */
+  position: relative;
+  background: var(--color-bg);         /* 背景色（重要：文字の後ろを隠す） */
+  padding: 0 0.5em;
+  z-index: 2;               /* 線より上に表示 */
+}
+</style>
+
+<p>話題A</p>
+<hr class="with-text" data-content="任意の内容">
+<p>話題B</p>
+
