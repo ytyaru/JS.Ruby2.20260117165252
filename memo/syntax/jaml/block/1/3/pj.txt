@@ -1,0 +1,180 @@
+jaml/
+    build.sh              dist/bundle.jsを作成する
+    test.sh               test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+    dist/
+        core/bundle.js
+        ui/viewer/bundle.js
+        ui/editor/bundle.js
+        lib/file/converter/bundle.js    jsJaml/HTML/PDF/EPub/TEI-Liteを相互変換する
+        lib/file/printer/bundle.js      綴じ方を指定して印刷する。JamlやHTMLをPDFに変換する。
+        lib/net/publisher/bundle.js     原稿を所定の場所にアップロードする。
+        lib/net/pusher/bundle.js        原稿の公開を所定の場所に通知する
+        lib/net/puller/bundle.js        原稿を所定の場所からダウンロードする
+        app/proofreader/bundle.js       viewer拡張。間違い箇所を原稿にdiff書式で追記し、Upload/Download。
+        app/reader/bundle.js            viewer拡張。栞、URLで特定箇所を指定する、範囲テキスト部分の原稿コピー等
+        app/writer/bundle.js            editor拡張。文書の構造化（章立て）、ブレイクスナイダービートシート等
+        app/looker/bundle.js            viewer拡張。ダウンロード機能追加。
+        app/publisher/bundle.js         writer拡張。アップロード機能追加。
+    test/
+        %../src/%                  ../src/と同じ構成（/jaml/src/のようにパス指定することも可能。相対／絶対パス書式の両方に対応できること（相対:`./`, `../../`, `(冒頭何もなし)`, 絶対:`/`））
+    src/
+        core/
+            main.js               以下を呼び出す（原稿からHTMLテキストを返すAPI）
+            text/                 テキストに関する処理全般
+                manuscript.js     入力データを正規化する
+                html.js           出力データを正規化する
+                context/          各文脈
+                    unicode.js    Unicodeにまつわる処理（正規化、サニタイズ（ヌルバイト攻撃））
+                    os.js         改行コード統一
+                    japanese.js   日本語における正規化
+                    browser.js    HTMLのサニタイズ
+                    jaml.js       Jamlで禁止する文字を削除する等
+            lexer/                字句解析
+                block/
+                    main.js       blot.jsのこと
+                    lexer.js      block-lexer.jsのこと
+                    type/         block.jsのこと。以下のように分解する。FenceContextはpart/fence/context.jsへ。
+                        heading.js
+                        paragraph.js
+                        hr.js
+                        paging.js
+                        part.js
+                        fence.js
+                    part/         lexerの部品。block.type
+                        part.js
+                        hr.js
+                        paging.js
+                        heading.js
+                        fence/
+                            main.js             fence-lexer.js
+                            context.js          FenceContextクラス
+                            exclamation/    ! 注釈用ブロック（`⚠`などのアイコンを表示したり線で囲ったりして視覚的に注目させる領域。注意や補足用）
+                                main.js
+                            quotation/      " 引用符（外部文書からの引用とそのURL指定）
+                                main.js
+                            number/         # コメントブロック（`Blot`が変換処理をしないブロック）
+                                main.js
+                            dollar/         $ `<script>`に埋め込むJavaScriptソースコード記入ブロック。
+                                main.js
+                            percent/        % `%some%`のような書式を置換するテンプレートブロック。
+                                main.js
+                            ampersand/      & `<style>`に埋め込むCSSソースコード記入ブロック。
+                                main.js
+                            apostrophe/     '  会話ブロック（チャット、掲示板など特定の会話を表記する）
+                                main.js
+                            hyphen/         - 非表示DB用ブロック（フロントマター、URLの短縮定義、`<template>`等、他から参照される想定のデータ）
+                                main.js
+                            caret/          ^ 注釈用データブロック（マウスオーバーなどで表示される注釈用テキストデータを定義する領域）
+                                main.js
+                            tilde/          ~ `<details><summary>`ブロック。チルダ`~`の意味が「約、およそ、〜から」であることから。
+                                main.js
+                            at/             @ 文書の著者や関係者への連絡先や文書のライセンスを定義するブロック。
+                                main.js
+                            plus/           + 異文脈表示用ブロック(データ構造(table, list, tree, network), ダイアグラム(mermaid), 操作(keybordmap), AA(ascii-art)、端末(ANSIエスケープシーケンス(をHTML表示する))等)
+                                main.js
+                                structure/
+                                    table.js
+                                    list.js
+                                    tree.js
+                                    network.js
+                                context/            このあたりをどう構造化すれば良いやら
+                                    math-ml.js      
+                                    music-xml.js    
+                                    opml.js         Outline Processor Markup Language
+                                    rss.js          
+                                    atom.js         
+                                    terminal.js     ANSIエスケープシーケンス
+                                diagram/
+                                    mermaid.js
+                                plain-text/
+                                    pre.js
+                                    ascii-art.js
+                            asterisk/       * フォーム、エディタ、アプリなどユーザ入力で編集可能なインタラクティブ系の内容を書くブロック。
+                                main.js
+                                client/
+                                    form.js                   ユーザ入力できる奴
+                                    text-editor.js            Aceみたいな奴
+                                    code-playground.js        CodePenみたいな奴
+                                    file-playground.js        ファイルシステムシミュレータ
+                                    terminal-playground.js    ANSIエスケープシーケンス。Linuxコマンドシミュレータ
+                                server/
+                                    %../local/%
+                            less/           < HTMLインジェクション用ブロック（入力されたHTML文字列をそのまま`innerHTML`に打ち込むヤベー奴）
+                                main.js
+                            greater/        > `Blot`など解析ツールの設定値をHTMLに出力するブロック。
+                                main.js
+                            question/       ? 注釈用ブロック（`❓`などのアイコンを表示したり線で囲ったりして視覚的に注目させる領域。ヘルプ用。）
+                                main.js
+                            slash/          / 非表示DB用ブロック（参照パス短縮定義用）：内部文書のパス短縮定義、URLの短縮定義
+                                main.js
+                            backslash/      \ エスケープブロック（原稿そのままのテキストで出力するブロック。`Blot`メタ文字もそのまま出力する）。
+                                main.js
+                inline/
+                    main.js
+                    parts/
+                        escape.js
+                        rbem.js
+                        kbd.js
+                        a.js
+            parser/               内部データからHTMLに変換する
+                main.js
+                block/
+                    main.js         block-parser.jsのこと
+                    parts/
+                        heading.js
+                        paragraph.js
+                        hr.js
+                        fence.js
+                        part.js
+                    fence/
+                        %jaml/src/core/lexer/block/part/fence/%
+                inline/
+                    %../../lexer/inline%
+            pager/
+                main.js          HTML表示サイズを計算して`<div data-page="1">`のようにページを要素化する
+                calc/
+                    main.js
+                    heading/
+                        main.js
+                    paragpraph/
+                        main.js
+                    fence/
+                        %jaml/src/core/lexer/block/part/fence/%
+                    parts/
+                        margin.js
+                        padding.js
+                        line-height.js            1.5〜1.75em
+                        letter-spacing.js         0.05em
+                        line-of-chars.js          フォントサイズ計算
+                        writing-mode.js           writing-mode:vertical-rl;  / horizontal-tb;
+                        text-orientation.js       text-orientation: upright; / mixed;
+                        text-combine-upright.js   text-combine-upright: all;
+                setting/
+                    main.js
+                    screen/
+                        main.js   実行中画面のスクリーン、カレント各サイズ取得
+                    paper/
+                        main.js   A4など定形サイズ取得
+        proofread/
+            main.js   校正（原稿のフロントマターに原稿修正履歴をdiffを取って記録する）
+        ui/
+            viewer/   閲覧用WebComponent作成。
+            editor/   編集用WebComponent 作成。 
+            part/
+                downloader/   原稿/HTML/PDF/EPub/TEI-Liteをダウンロードする
+                uploader/     原稿/HTML/PDF/EPub/TEI-Liteをアップロードする  
+        lib/
+            file/
+                converter/    Jaml/HTML/PDF/EPub/TEI-Liteを相互変換する
+                printer/      綴じ方を指定して印刷する。JamlやHTMLをPDFに変換する。
+            net/
+                publisher/    原稿を所定の場所にアップロードする。
+                pusher/       原稿の公開を所定の場所に通知する。
+                puller/       原稿を所定の場所からダウンロードする。
+        app/
+            proofreader/      viewer拡張。間違い箇所を指摘し、修正データを入れる（diffデータ、リビジョンをフロントマターに入れる。指定箇所にアップロード／ダウンロードする）
+            reader/           viewer拡張。栞、URLで特定箇所を指定する、範囲テキスト部分の原稿コピー等
+            writer/           editor拡張。文書の構造化（章立て）、ブレイクスナイダービートシート等
+            looker/           viewer拡張。ダウンロード機能追加。
+            publisher/        writer拡張。アップロード機能追加。
+
