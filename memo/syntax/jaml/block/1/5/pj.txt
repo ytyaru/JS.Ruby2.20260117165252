@@ -78,6 +78,7 @@ jaml/
                         paging.js
                         heading.js
                         fence/
+                            main.js
                             exclamation/    ! 注釈用ブロック（`⚠`などのアイコンを表示したり線で囲ったりして視覚的に注目させる領域。注意や補足用）
                                 main.js
                             quotation/      " 引用符（外部文書からの引用とそのURL指定）
