@@ -119,7 +119,7 @@ jaml/
                                     file-playground.js        ファイルシステムシミュレータ
                                     terminal-playground.js    ANSIエスケープシーケンス。Linuxコマンドシミュレータ
                                 server/
-                                    %../local/%
+                                    %../client/%
                             backquote/      `` ` `` バッククォート（ソースコードの構文強調）
                                 main.js
                             less/           < HTMLインジェクション用ブロック（入力されたHTML文字列をそのまま`innerHTML`に打ち込むヤベー奴）
@@ -171,24 +171,32 @@ jaml/
                     paper/
                         main.js   A4など定形サイズ取得
         converter/      大は小を兼ねるのでこっちが良い？　PDFだけはこっちにする？　分別すべきか否か
-            html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
-                dist/
-                test/
-                src/
-                    main.js
-                README.md
-                build.sh    dist/配下にバンドルしたJSコードを生成する
-                test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            pdf/
-            epub/
-            markdown/
-            asciidoc/
-            tei-lite/
-            novel/
-                aozora/
-                kakuyomu/
-                narou/
-                alpha-police/
+            README.md
+            build.sh    dist/配下にバンドルしたJSコードを生成する
+            test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+            dist/
+            test/
+            src/
+                main.js
+                context/
+                    html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
+                        dist/
+                        test/
+                        src/
+                            main.js
+                        README.md
+                        build.sh    dist/配下にバンドルしたJSコードを生成する
+                        test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+                    pdf/
+                    epub/
+                    markdown/
+                    asciidoc/
+                    tei-lite/
+                    novel/
+                        aozora/
+                        kakuyomu/
+                        narou/
+                        alpha-police/
         linter/
         puller/
         subscriber/

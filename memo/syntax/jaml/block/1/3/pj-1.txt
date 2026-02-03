@@ -1,17 +1,13 @@
 jaml/
-    api/                エンドユーザ参照用API
-        dist/
-        test/
-        src/
-            main.js
-        README.md
-        build.sh        dist/配下にバンドルしたJSコードを生成する
-        test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-    lib/
-        normalizer/         原稿を正規化する
-            dist/
-            test/
-            src/
+    build.sh              dist/配下にバンドルしたJSコードを生成する
+    test.sh               test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+    dist/
+    test/
+        %../src/%
+    src/
+        core/
+            main.js             Jaml.parseAsync(原稿) -> HTMLテキスト(ページ毎/ブロック毎)
+            normalizer/         テキストを正規化する
                 manuscript.js     入力データを正規化する
                 html.js           出力データを正規化する
                 context/        各文脈
@@ -20,16 +16,7 @@ jaml/
                     japanese.js   日本語における正規化
                     browser.js    HTMLのサニタイズ
                     jaml.js       Jamlで禁止する文字を削除する等
-            README.md
-            build.sh        dist/配下にバンドルしたJSコードを生成する
-            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-        parser/             原稿からASTを返す。構文解析（構文エラーはparserかlinterどちらが担当すべき？）
-            README.md
-            build.sh        dist/配下にバンドルしたJSコードを生成する
-            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            dist/
-            test/
-            src/
+            parser/             構文解析（構文エラーはparserかlinterどちらが担当すべき？）
                 main.js         tokernizerからlexerに値を渡してATS木を返す（ブロック配列,generator,async用API）
                 regexp/         token生成用書式定義(旧pattern/)
                     block.js
@@ -139,14 +126,10 @@ jaml/
                         a.js
                 lexer/          トークンからASTを生成する（block、inline、fenceBlockの分類や構造化）
                     main.js     ATS木を作る。block内のinline tokenizerを呼び出す、フェンス内ネストフェンスのtokenizerを呼び出す、それら階層構造をオブジェクトのそれで表現する等。
-        pager/
-            README.md
-            build.sh        dist/配下にバンドルしたJSコードを生成する
-            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            dist/
-            test/
-            src/
-                main.js     HTMLテキストからページ用HTMLテキストを返す（ブロック配列,generator,async用API）
+            renderer/           ATS木からHTMLテキストを生成する
+                main.js
+            pager/              HTMLテキストから座標計算しページ単位に分割したHTML要素を返す
+                main.js         HTMLテキストからページ用HTMLテキストを返す（ブロック配列,generator,async用API）
                 calc/
                     main.js
                     heading/
@@ -154,7 +137,7 @@ jaml/
                     paragpraph/
                         main.js
                     fence/
-                        %jaml/lib/parser/tokenizer/block/fence/%
+                        %jaml/src/core/parser/tokenizer/block/fence/%
                     parts/
                         margin.js
                         padding.js
@@ -170,42 +153,27 @@ jaml/
                         main.js   実行中画面のスクリーン、カレント各サイズ取得
                     paper/
                         main.js   A4など定形サイズ取得
-        converter/      大は小を兼ねるのでこっちが良い？　PDFだけはこっちにする？　分別すべきか否か
-            html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
-                dist/
-                test/
-                src/
-                    main.js
-                README.md
-                build.sh    dist/配下にバンドルしたJSコードを生成する
-                test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            pdf/
-            epub/
-            markdown/
-            asciidoc/
-            tei-lite/
-            novel/
-                aozora/
-                kakuyomu/
-                narou/
-                alpha-police/
-        linter/
-        puller/
-        subscriber/
-        pusher/
-        publisher/
-        printer/
-        proofreader/
-    ui/
-        viewer/
-        editor/
-        uploader/
-        downloader/
+    lib/
+        blob/
+            converter/      Jaml/HTML/PDF/EPub/Markdown/AsciiDoc/TEI-lite/青空文庫/各種小説投稿サイト用構文
+        file/
+            converter/      Jaml/HTML/PDF/EPub/Markdown/AsciiDoc/TEI-lite/青空文庫/各種小説投稿サイト用構文
+        net/
+            publisher/  原稿を所定の場所にアップロードする。
+            pusher/     原稿の公開を所定の場所に通知する。
+            subscriber/ 原稿の公開を購読する（通知を受信する）。
+            puller/     原稿を所定の場所からダウンロードする。
+        ui/
+            linter/     原稿静的解析ツール（構文エラー箇所と原因、対処法を網羅し表示する）
+            downloader/ 原稿/HTML/PDF/EPub/TEI-Lite等をダウンロードする
+            uploader/   原稿/HTML/PDF/EPub/TEI-Lite等をアップロードする  
+            viewer/     閲覧用WebComponent作成
+            editor/     編集用WebComponent作成
+            proofread/  校正用WebComponent作成（原稿のフロントマターに原稿修正履歴をdiffを取って記録する）
+            printer/    綴じ方を指定して印刷する。JamlやHTMLをPDFに変換する。
     app/
-        linter/
-        printer/
-        proofreader/
-        reader/
-        writer/
-        looker/
-        publisher/
+        proofreader/      viewer拡張。間違い箇所を指摘し、修正データを入れる（diffデータ、リビジョンをフロントマターに入れる。指定箇所にアップロード／ダウンロードする）
+        reader/           viewer拡張。栞、URLで特定箇所を指定する、範囲テキスト部分の原稿コピー等
+        writer/           editor拡張。文書の構造化（章立て）、ブレイクスナイダービートシート等
+        looker/           viewer拡張。ダウンロード機能追加。
+        publisher/        writer拡張。アップロード機能追加。

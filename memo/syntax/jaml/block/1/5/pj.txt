@@ -12,14 +12,23 @@ jaml/
             dist/
             test/
             src/
-                manuscript.js     入力データを正規化する
-                html.js           出力データを正規化する
-                context/        各文脈
-                    unicode.js    Unicodeにまつわる処理（正規化、サニタイズ（ヌルバイト攻撃））
-                    os.js         改行コード統一
-                    japanese.js   日本語における正規化
-                    browser.js    HTMLのサニタイズ
-                    jaml.js       Jamlで禁止する文字を削除する等
+                main.js         Normalizerクラス
+                context/        書式以前の所で正規化すべきもの
+                    unicode.js
+                    os.js
+                    japanese.js
+                format/         ユーザが直接入力した場合に正規化する
+                    html.js     旧context/browser.js
+                    jaml.js     旧context/jaml.js
+                    epub.js
+                    markdown.js
+                    asciidoc.js
+                    tei-light.js
+                    novel/
+                        aozora.js
+                        kakuyomu.js
+                        narou.js
+                        alpha-police.js
             README.md
             build.sh        dist/配下にバンドルしたJSコードを生成する
             test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
@@ -119,7 +128,7 @@ jaml/
                                     file-playground.js        ファイルシステムシミュレータ
                                     terminal-playground.js    ANSIエスケープシーケンス。Linuxコマンドシミュレータ
                                 server/
-                                    %../local/%
+                                    %../client/%
                             backquote/      `` ` `` バッククォート（ソースコードの構文強調）
                                 main.js
                             less/           < HTMLインジェクション用ブロック（入力されたHTML文字列をそのまま`innerHTML`に打ち込むヤベー奴）
@@ -171,24 +180,32 @@ jaml/
                     paper/
                         main.js   A4など定形サイズ取得
         converter/      大は小を兼ねるのでこっちが良い？　PDFだけはこっちにする？　分別すべきか否か
-            html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
-                dist/
-                test/
-                src/
-                    main.js
-                README.md
-                build.sh    dist/配下にバンドルしたJSコードを生成する
-                test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            pdf/
-            epub/
-            markdown/
-            asciidoc/
-            tei-lite/
-            novel/
-                aozora/
-                kakuyomu/
-                narou/
-                alpha-police/
+            README.md
+            build.sh    dist/配下にバンドルしたJSコードを生成する
+            test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+            dist/
+            test/
+            src/
+                main.js
+                context/
+                    html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
+                        dist/
+                        test/
+                        src/
+                            main.js
+                        README.md
+                        build.sh    dist/配下にバンドルしたJSコードを生成する
+                        test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+                    pdf/
+                    epub/
+                    markdown/
+                    asciidoc/
+                    tei-lite/
+                    novel/
+                        aozora/
+                        kakuyomu/
+                        narou/
+                        alpha-police/
         linter/
         puller/
         subscriber/

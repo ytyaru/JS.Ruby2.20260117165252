@@ -1,74 +1,53 @@
 jaml/
-    api/                エンドユーザ参照用API
-        dist/
-        test/
-        src/
-            main.js
-        README.md
-        build.sh        dist/配下にバンドルしたJSコードを生成する
-        test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-    lib/
-        normalizer/         原稿を正規化する
-            dist/
-            test/
-            src/
+    build.sh              dist/bundle.jsを作成する
+    test.sh               test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+    dist/
+        core/bundle.js
+        ui/viewer/bundle.js
+        ui/editor/bundle.js
+        lib/file/converter/bundle.js    jsJaml/HTML/PDF/EPub/TEI-Liteを相互変換する
+        lib/file/printer/bundle.js      綴じ方を指定して印刷する。JamlやHTMLをPDFに変換する。
+        lib/net/publisher/bundle.js     原稿を所定の場所にアップロードする。
+        lib/net/pusher/bundle.js        原稿の公開を所定の場所に通知する
+        lib/net/puller/bundle.js        原稿を所定の場所からダウンロードする
+        app/proofreader/bundle.js       viewer拡張。間違い箇所を原稿にdiff書式で追記し、Upload/Download。
+        app/reader/bundle.js            viewer拡張。栞、URLで特定箇所を指定する、範囲テキスト部分の原稿コピー等
+        app/writer/bundle.js            editor拡張。文書の構造化（章立て）、ブレイクスナイダービートシート等
+        app/looker/bundle.js            viewer拡張。ダウンロード機能追加。
+        app/publisher/bundle.js         writer拡張。アップロード機能追加。
+    test/
+        %../src/%                  ../src/と同じ構成（/jaml/src/のようにパス指定することも可能。相対／絶対パス書式の両方に対応できること（相対:`./`, `../../`, `(冒頭何もなし)`, 絶対:`/`））
+    src/
+        core/
+            main.js               以下を呼び出す（原稿からHTMLテキストを返すAPI）
+            text/                 テキストに関する処理全般
                 manuscript.js     入力データを正規化する
                 html.js           出力データを正規化する
-                context/        各文脈
+                context/          各文脈
                     unicode.js    Unicodeにまつわる処理（正規化、サニタイズ（ヌルバイト攻撃））
                     os.js         改行コード統一
                     japanese.js   日本語における正規化
                     browser.js    HTMLのサニタイズ
                     jaml.js       Jamlで禁止する文字を削除する等
-            README.md
-            build.sh        dist/配下にバンドルしたJSコードを生成する
-            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-        parser/             原稿からASTを返す。構文解析（構文エラーはparserかlinterどちらが担当すべき？）
-            README.md
-            build.sh        dist/配下にバンドルしたJSコードを生成する
-            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            dist/
-            test/
-            src/
-                main.js         tokernizerからlexerに値を渡してATS木を返す（ブロック配列,generator,async用API）
-                regexp/         token生成用書式定義(旧pattern/)
-                    block.js
-                    inline.js
-                    fence.js
-                token/          必要か？　ast-node/と大差ないのでは？そもそも純粋なtoken定義とは？
-                    type.js     トークン種別の定数定義 (HEADING_MARKER, TEXT, FENCE_START etc)
-                    token.js    Tokenクラス ({type, value, index})
-                ast-node/       構文要素(ASTノード) tokernizerやlexerの両方から参照される？
-                    block.js    Block基底クラス
-                    inline.js   Inline基底クラス
-                    block/      Heading,Paragraphクラス等(block.jsにあるParagraphBlockクラス等を定義する)
+            lexer/                字句解析
+                block/
+                    main.js       blot.jsのこと
+                    lexer.js      block-lexer.jsのこと
+                    type/         block.jsのこと。以下のように分解する。FenceContextはpart/fence/context.jsへ。
                         heading.js
                         paragraph.js
                         hr.js
                         paging.js
                         part.js
                         fence.js
-                        fence/      メタ文字ディレクトリで分類する
-                            plus/   出力形態が多く、どう構造化するか未定。順次考え実装する。
-                                structure/
-                                    table.js        <table>
-                                    list.js         <ul>,<ol>,<li>
-                            backquote/
-                                pre-code.js
-                    inline/     Ruby,Emクラス等
-                        escape.js
-                        ruby.js
-                        em.js
-                        kbd.js
-                        a.js
-                tokenizer/      原稿テキストを予約語や引数などの短いテキスト（トークン）に分解する
-                    main.js     現在のblock-lexer.js
-                    block/      現在の各種lexer（lexers/heading-lexer.js等）
+                    part/         lexerの部品。block.type
                         part.js
                         hr.js
                         paging.js
                         heading.js
                         fence/
+                            main.js             fence-lexer.js
+                            context.js          FenceContextクラス
                             exclamation/    ! 注釈用ブロック（`⚠`などのアイコンを表示したり線で囲ったりして視覚的に注目させる領域。注意や補足用）
                                 main.js
                             quotation/      " 引用符（外部文書からの引用とそのURL指定）
@@ -120,8 +99,6 @@ jaml/
                                     terminal-playground.js    ANSIエスケープシーケンス。Linuxコマンドシミュレータ
                                 server/
                                     %../local/%
-                            backquote/      `` ` `` バッククォート（ソースコードの構文強調）
-                                main.js
                             less/           < HTMLインジェクション用ブロック（入力されたHTML文字列をそのまま`innerHTML`に打ち込むヤベー奴）
                                 main.js
                             greater/        > `Blot`など解析ツールの設定値をHTMLに出力するブロック。
@@ -132,21 +109,29 @@ jaml/
                                 main.js
                             backslash/      \ エスケープブロック（原稿そのままのテキストで出力するブロック。`Blot`メタ文字もそのまま出力する）。
                                 main.js
-                    inline/
+                inline/
+                    main.js
+                    parts/
                         escape.js
-                        rbem.js     rubyとemは《》を使った類似構文のため一つにまとめる
+                        rbem.js
                         kbd.js
                         a.js
-                lexer/          トークンからASTを生成する（block、inline、fenceBlockの分類や構造化）
-                    main.js     ATS木を作る。block内のinline tokenizerを呼び出す、フェンス内ネストフェンスのtokenizerを呼び出す、それら階層構造をオブジェクトのそれで表現する等。
-        pager/
-            README.md
-            build.sh        dist/配下にバンドルしたJSコードを生成する
-            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            dist/
-            test/
-            src/
-                main.js     HTMLテキストからページ用HTMLテキストを返す（ブロック配列,generator,async用API）
+            parser/               内部データからHTMLに変換する
+                main.js
+                block/
+                    main.js         block-parser.jsのこと
+                    parts/
+                        heading.js
+                        paragraph.js
+                        hr.js
+                        fence.js
+                        part.js
+                    fence/
+                        %jaml/src/core/lexer/block/part/fence/%
+                inline/
+                    %../../lexer/inline%
+            pager/
+                main.js          HTML表示サイズを計算して`<div data-page="1">`のようにページを要素化する
                 calc/
                     main.js
                     heading/
@@ -154,7 +139,7 @@ jaml/
                     paragpraph/
                         main.js
                     fence/
-                        %jaml/lib/parser/tokenizer/block/fence/%
+                        %jaml/src/core/lexer/block/part/fence/%
                     parts/
                         margin.js
                         padding.js
@@ -170,42 +155,26 @@ jaml/
                         main.js   実行中画面のスクリーン、カレント各サイズ取得
                     paper/
                         main.js   A4など定形サイズ取得
-        converter/      大は小を兼ねるのでこっちが良い？　PDFだけはこっちにする？　分別すべきか否か
-            html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
-                dist/
-                test/
-                src/
-                    main.js
-                README.md
-                build.sh    dist/配下にバンドルしたJSコードを生成する
-                test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
-            pdf/
-            epub/
-            markdown/
-            asciidoc/
-            tei-lite/
-            novel/
-                aozora/
-                kakuyomu/
-                narou/
-                alpha-police/
-        linter/
-        puller/
-        subscriber/
-        pusher/
-        publisher/
-        printer/
-        proofreader/
-    ui/
-        viewer/
-        editor/
-        uploader/
-        downloader/
-    app/
-        linter/
-        printer/
-        proofreader/
-        reader/
-        writer/
-        looker/
-        publisher/
+        proofread/
+            main.js   校正（原稿のフロントマターに原稿修正履歴をdiffを取って記録する）
+        ui/
+            viewer/   閲覧用WebComponent作成。
+            editor/   編集用WebComponent 作成。 
+            part/
+                downloader/   原稿/HTML/PDF/EPub/TEI-Liteをダウンロードする
+                uploader/     原稿/HTML/PDF/EPub/TEI-Liteをアップロードする  
+        lib/
+            file/
+                converter/    Jaml/HTML/PDF/EPub/TEI-Liteを相互変換する
+                printer/      綴じ方を指定して印刷する。JamlやHTMLをPDFに変換する。
+            net/
+                publisher/    原稿を所定の場所にアップロードする。
+                pusher/       原稿の公開を所定の場所に通知する。
+                puller/       原稿を所定の場所からダウンロードする。
+        app/
+            proofreader/      viewer拡張。間違い箇所を指摘し、修正データを入れる（diffデータ、リビジョンをフロントマターに入れる。指定箇所にアップロード／ダウンロードする）
+            reader/           viewer拡張。栞、URLで特定箇所を指定する、範囲テキスト部分の原稿コピー等
+            writer/           editor拡張。文書の構造化（章立て）、ブレイクスナイダービートシート等
+            looker/           viewer拡張。ダウンロード機能追加。
+            publisher/        writer拡張。アップロード機能追加。
+
