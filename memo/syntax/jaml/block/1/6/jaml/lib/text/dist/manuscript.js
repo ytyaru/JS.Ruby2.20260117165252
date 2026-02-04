@@ -8,12 +8,25 @@ class UnicodeContext {
   }
 }
 
+// ../error/src/main.js
+class JamlError extends Error {
+  constructor(msg, cause) {
+    super(msg, cause ? { cause } : undefined);
+    this.name = "JamlError";
+  }
+}
+
 // src/normalizer/src/context/os.js
 class OsContext {
   static normalize(text, newline = `
 `) {
     if (!text)
       return "";
+    if (newline !== `
+` && newline !== `\r
+`) {
+      throw new JamlError(`正規化不正。改行コードは\\nまたは\\r\\nのいずれかであるべきです。:${newline}`);
+    }
     if (newline === `
 `) {
       if (!text.includes("\r")) {
@@ -113,23 +126,28 @@ class TextIndex {
     let index = 0;
     const length = text.length;
     while (index < length && currentRow < row) {
-      const char = text[index];
-      if (char === `
+      if (text[index] === `
 `) {
         currentRow++;
       }
       index++;
     }
     if (currentRow === row) {
-      return Math.min(index + col, length);
+      const targetIndex = index + col;
+      if (targetIndex <= length) {
+        return targetIndex;
+      }
     }
-    return -1;
+    throw new JamlError(`範囲外です。row:${row},col:${col}`);
   }
   static getRowCol(text, index) {
+    if (index < 0 || index > text.length) {
+      throw new JamlError(`範囲外です。index:${index}`);
+    }
     let row = 0;
     let col = 0;
     let i = 0;
-    while (i < index && i < text.length) {
+    while (i < index) {
       if (text[i] === `
 `) {
         row++;

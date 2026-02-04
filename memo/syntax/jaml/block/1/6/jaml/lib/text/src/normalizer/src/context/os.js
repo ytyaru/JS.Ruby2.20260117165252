@@ -1,5 +1,4 @@
-// 相対パスでJamlErrorをインポート (構造依存)
-import { JamlError } from '../../../../../../error/src/main.js';
+import { JamlError } from '../../../../../error/src/main.js';
 
 export class OsContext {
     /**
@@ -16,13 +15,18 @@ export class OsContext {
             throw new JamlError(`正規化不正。改行コードは\\nまたは\\r\\nのいずれかであるべきです。:${newline}`);
         }
 
-        // ケース1: LFへの統一
+        // ケース1: LFへの統一（推奨・標準）
         if (newline === '\n') {
-            if (!text.includes('\r')) return text;
+            // CRが含まれていなければ、既にLFのみか改行なし。何もしない (Cost: 0)
+            if (!text.includes('\r')) {
+                return text;
+            }
+            // CRを含む場合のみ、CRLFとCRを一括でLFに置換 (Cost: 1)
             return text.replace(/\r\n|\r/g, '\n');
         }
 
         // ケース2: CRLFへの統一
+        // 一旦LFに正規化してからターゲットに変換
         const lfText = text.includes('\r') ? text.replace(/\r\n|\r/g, '\n') : text;
         return lfText.replace(/\n/g, newline);
     }
