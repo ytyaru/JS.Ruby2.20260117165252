@@ -1,0 +1,10 @@
+export const TokenType = {
+    EOF: 'EOF',
+    TEXT: 'TEXT',
+    EMPTY_LINE: 'EMPTY_LINE',
+    BLOCK_HEADING: 'BLOCK_HEADING',
+    BLOCK_HR: 'BLOCK_HR',
+    BLOCK_PAGING: 'BLOCK_PAGING',
+    BLOCK_PART: 'BLOCK_PART',
+    FENCE_START: 'FENCE_START',
+};

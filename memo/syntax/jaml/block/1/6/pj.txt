@@ -1,0 +1,266 @@
+jaml/
+    api/                エンドユーザ参照用API
+        dist/
+        test/
+        src/
+            main.js
+        README.md
+        build.sh        dist/配下にバンドルしたJSコードを生成する
+        test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+    lib/
+        error/
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     JamlErrorクラス
+        text/
+            README.md
+            build.sh        dist/配下にバンドルしたJSコードを生成する
+            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+            dist/
+            test/
+                manuscript.js
+            src/
+                manuscript.js       normalize(原稿,opt), count(原稿,opt), getRowCol(index), getIndex(row, col)
+                normalizer/         原稿を正規化する
+                    test.sh
+                    build.sh
+                    README.md
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js         Normalizerクラス
+                        context/        書式以前の所で正規化すべきもの
+                            unicode.js
+                            os.js
+                            japanese.js
+                        format/         ユーザが直接入力した場合に正規化する
+                            html.js     旧context/browser.js
+                            jaml.js     旧context/jaml.js
+                            epub.js
+                            markdown.js
+                            asciidoc.js
+                            tei-light.js
+                            novel/
+                                aozora.js
+                                kakuyomu.js
+                                narou.js
+                                alpha-police.js
+                counter/        文字数、単語数、文数を数える(全文、メタ文字を除く、ルビ文字を除くなどの条件設定可)
+                    test.sh
+                    build.sh
+                    README.md
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js
+                index/          textのindexからrow,colを取得する（逆もあり）
+                    test.sh
+                    build.sh
+                    README.md
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js
+        parser/             原稿からASTを返す。構文解析（構文エラーはparserかlinterどちらが担当すべき？）
+            README.md
+            build.sh        dist/配下にバンドルしたJSコードを生成する
+            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+            dist/
+            test/
+            src/
+                main.js         tokernizerからlexerに値を渡してATS木を返す（ブロック配列,generator,async用API）
+                regexp/         token生成用書式定義(旧pattern/)
+                    block.js
+                    inline.js
+                    fence.js
+                token/          必要か？　ast-node/と大差ないのでは？そもそも純粋なtoken定義とは？
+                    type.js     トークン種別の定数定義 (HEADING_MARKER, TEXT, FENCE_START etc)
+                    token.js    Tokenクラス ({type, value, index})
+                ast-node/       構文要素(ASTノード) tokernizerやlexerの両方から参照される？
+                    block.js    Block基底クラス
+                    inline.js   Inline基底クラス
+                    block/      Heading,Paragraphクラス等(block.jsにあるParagraphBlockクラス等を定義する)
+                        heading.js
+                        paragraph.js
+                        hr.js
+                        paging.js
+                        part.js
+                        fence.js
+                        fence/      メタ文字ディレクトリで分類する
+                            plus/   出力形態が多く、どう構造化するか未定。順次考え実装する。
+                                structure/
+                                    table.js        <table>
+                                    list.js         <ul>,<ol>,<li>
+                            backquote/
+                                pre-code.js
+                    inline/     Ruby,Emクラス等
+                        escape.js
+                        ruby.js
+                        em.js
+                        kbd.js
+                        a.js
+                tokenizer/      原稿テキストを予約語や引数などの短いテキスト（トークン）に分解する
+                    main.js     現在のblock-lexer.js
+                    block/      現在の各種lexer（lexers/heading-lexer.js等）
+                        part.js
+                        hr.js
+                        paging.js
+                        heading.js
+                        fence/
+                            main.js
+                            exclamation/    ! 注釈用ブロック（`⚠`などのアイコンを表示したり線で囲ったりして視覚的に注目させる領域。注意や補足用）
+                                main.js
+                            quotation/      " 引用符（外部文書からの引用とそのURL指定）
+                                main.js
+                            number/         # コメントブロック（`Blot`が変換処理をしないブロック）
+                                main.js
+                            dollar/         $ `<script>`に埋め込むJavaScriptソースコード記入ブロック。
+                                main.js
+                            percent/        % `%some%`のような書式を置換するテンプレートブロック。
+                                main.js
+                            ampersand/      & `<style>`に埋め込むCSSソースコード記入ブロック。
+                                main.js
+                            apostrophe/     '  会話ブロック（チャット、掲示板など特定の会話を表記する）
+                                main.js
+                            hyphen/         - 非表示DB用ブロック（フロントマター、URLの短縮定義、`<template>`等、他から参照される想定のデータ）
+                                main.js
+                            caret/          ^ 注釈用データブロック（マウスオーバーなどで表示される注釈用テキストデータを定義する領域）
+                                main.js
+                            tilde/          ~ `<details><summary>`ブロック。チルダ`~`の意味が「約、およそ、〜から」であることから。
+                                main.js
+                            at/             @ 文書の著者や関係者への連絡先や文書のライセンスを定義するブロック。
+                                main.js
+                            plus/           + 異文脈表示用ブロック(データ構造(table, list, tree, network), ダイアグラム(mermaid), 操作(keybordmap), AA(ascii-art)、端末(ANSIエスケープシーケンス(をHTML表示する))等)
+                                main.js
+                                structure/
+                                    table.js
+                                    list.js
+                                    tree.js
+                                    network.js
+                                context/            このあたりをどう構造化すれば良いやら
+                                    math-ml.js      
+                                    music-xml.js    
+                                    opml.js         Outline Processor Markup Language
+                                    rss.js          
+                                    atom.js         
+                                    terminal.js     ANSIエスケープシーケンス
+                                diagram/
+                                    mermaid.js
+                                plain-text/
+                                    pre.js
+                                    ascii-art.js
+                            asterisk/       * フォーム、エディタ、アプリなどユーザ入力で編集可能なインタラクティブ系の内容を書くブロック。
+                                main.js
+                                client/
+                                    form.js                   ユーザ入力できる奴
+                                    text-editor.js            Aceみたいな奴
+                                    code-playground.js        CodePenみたいな奴
+                                    file-playground.js        ファイルシステムシミュレータ
+                                    terminal-playground.js    ANSIエスケープシーケンス。Linuxコマンドシミュレータ
+                                server/
+                                    %../client/%
+                            backquote/      `` ` `` バッククォート（ソースコードの構文強調）
+                                main.js
+                            less/           < HTMLインジェクション用ブロック（入力されたHTML文字列をそのまま`innerHTML`に打ち込むヤベー奴）
+                                main.js
+                            greater/        > `Blot`など解析ツールの設定値をHTMLに出力するブロック。
+                                main.js
+                            question/       ? 注釈用ブロック（`❓`などのアイコンを表示したり線で囲ったりして視覚的に注目させる領域。ヘルプ用。）
+                                main.js
+                            slash/          / 非表示DB用ブロック（参照パス短縮定義用）：内部文書のパス短縮定義、URLの短縮定義
+                                main.js
+                            backslash/      \ エスケープブロック（原稿そのままのテキストで出力するブロック。`Blot`メタ文字もそのまま出力する）。
+                                main.js
+                    inline/
+                        escape.js
+                        rbem.js     rubyとemは《》を使った類似構文のため一つにまとめる
+                        kbd.js
+                        a.js
+                lexer/          トークンからASTを生成する（block、inline、fenceBlockの分類や構造化）
+                    main.js     ATS木を作る。block内のinline tokenizerを呼び出す、フェンス内ネストフェンスのtokenizerを呼び出す、それら階層構造をオブジェクトのそれで表現する等。
+        pager/
+            README.md
+            build.sh        dist/配下にバンドルしたJSコードを生成する
+            test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+            dist/
+            test/
+            src/
+                main.js     HTMLテキストからページ用HTMLテキストを返す（ブロック配列,generator,async用API）
+                calc/
+                    main.js
+                    heading/
+                        main.js
+                    paragpraph/
+                        main.js
+                    fence/
+                        %jaml/lib/parser/tokenizer/block/fence/%
+                    parts/
+                        margin.js
+                        padding.js
+                        line-height.js            1.5〜1.75em
+                        letter-spacing.js         0.05em
+                        line-of-chars.js          フォントサイズ計算
+                        writing-mode.js           writing-mode:vertical-rl;  / horizontal-tb;
+                        text-orientation.js       text-orientation: upright; / mixed;
+                        text-combine-upright.js   text-combine-upright: all;
+                setting/
+                    main.js
+                    screen/
+                        main.js   実行中画面のスクリーン、カレント各サイズ取得
+                    paper/
+                        main.js   A4など定形サイズ取得
+        converter/      大は小を兼ねるのでこっちが良い？　PDFだけはこっちにする？　分別すべきか否か
+            README.md
+            build.sh    dist/配下にバンドルしたJSコードを生成する
+            test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+            dist/
+            test/
+            src/
+                main.js
+                context/
+                    html/       原稿をHTMLにする（これってconverterやtranspilerの配下では？）
+                        dist/
+                        test/
+                        src/
+                            main.js
+                        README.md
+                        build.sh    dist/配下にバンドルしたJSコードを生成する
+                        test.sh     test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+                    pdf/
+                    epub/
+                    markdown/
+                    asciidoc/
+                    tei-lite/
+                    novel/
+                        aozora/
+                        kakuyomu/
+                        narou/
+                        alpha-police/
+        linter/
+        puller/
+        subscriber/
+        pusher/
+        publisher/
+        printer/
+        proofreader/
+    ui/
+        viewer/
+        editor/
+        uploader/
+        downloader/
+    app/
+        linter/
+        printer/
+        proofreader/
+        reader/
+        writer/
+        looker/
+        publisher/

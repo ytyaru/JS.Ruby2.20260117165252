@@ -2,7 +2,10 @@ key.pem
 cert.pem
 localhost.pem
 *.pem
-bin/
-lib64/
-lib/
-include/
+#bin/
+#lib64/
+#lib/
+#include/
+
+# 以下を追加: jaml配下のlibディレクトリは無視しない（ソースコードのため）
+#!jaml/lib/
