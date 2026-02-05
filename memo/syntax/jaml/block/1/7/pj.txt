@@ -1,0 +1,284 @@
+jaml/
+    api/                エンドユーザ参照用API
+        dist/
+        test/
+        src/
+            main.js
+        README.md
+        build.sh
+        test.sh
+    core/               Jamlの中核機能
+        error/
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     JamlErrorクラス
+        charset/            文字コード処理
+            unicode/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js         Unicodeクラス
+                    sanitizer/      
+                        src/
+                            main.js
+                    normalizer/     
+                        src/
+                            main.js
+                    localizer/      
+                        ja/         
+                            src/
+                                regexp.js
+                                normalizer.js
+            ja16/           将来用
+                src/
+                    main.js
+        text/               テキスト処理基盤
+            core/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js         Textクラス
+                word/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js     WordText
+                unit/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js     UnitText
+                line/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js     LineText
+                list/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js     ListText
+                grid/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js     GridText
+                tree/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js     TreeText
+            super/
+                jaml/
+                    README.md
+                    build.sh
+                    test.sh
+                    dist/
+                    test/
+                        main.js
+                    src/
+                        main.js
+                html/
+        fence/              フェンスブロック定義
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    backquote.js
+                    quote.js
+        block/              ブロック要素定義
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    heading.js
+                    paragraph.js
+                    hr.js
+                    part.js
+                    paging.js
+        inline/             インライン要素定義
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    ruby.js
+                    em.js
+                    a.js
+        grammar/            構文ルール管理
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     GrammarRegistry
+                presets/
+                    jaml.js
+                    markdown.js
+        document/           文書モデル定義
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                core/       Documentクラス
+                    main.js
+                super/
+                    jaml.js
+        parser/             解析エンジン
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     CoreParser
+                tokenizer/  汎用Tokenizer
+                lexer/      汎用Lexer
+        converter/          出力変換 (Core: Jaml -> HTML)
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            html/
+                src/
+                    main.js
+        page/               物理分割
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     Pageクラス
+                screen/
+                    main.js
+                paper/
+                    main.js
+                super/
+                    jaml/
+                        src/
+                            page.js
+                            screen.js
+                            paper.js
+    lib/                周辺ツール・拡張機能
+        parser/             多形式対応パーサ
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     UnifiedParser
+                html/
+                    src/
+                        main.js
+                markdown/
+                    src/
+                        main.js
+                novel/
+                    kakuyomu/
+                        src/
+                            main.js
+                    narou/
+                        src/
+                            main.js
+                    alpha-police/
+                        src/
+                            main.js
+        converter/          多形式対応コンバータ
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     UnifiedConverter
+        linter/
+        puller/
+        subscriber/
+        pusher/
+        publisher/
+        printer/
+        proofreader/
+    ui/
+        viewer/
+        editor/
+        uploader/
+        downloader/
+    app/
+        linter/
+        printer/
+        proofreader/
+        reader/
+        writer/
+        looker/
+        publisher/
+

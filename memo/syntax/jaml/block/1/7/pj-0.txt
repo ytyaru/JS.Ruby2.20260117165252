@@ -1,0 +1,167 @@
+jaml/
+    api/                エンドユーザ参照用API
+        dist/
+        test/
+        src/
+            main.js
+        README.md
+        build.sh        dist/配下にバンドルしたJSコードを生成する
+        test.sh         test/main.jsを実行する（引数にパスを受け付ける。指定した部分テストのみ実行できる）
+    lib/
+        error/
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     JamlErrorクラス
+        charset/
+            unicode/                Unicode固有問題担当
+                src/
+                    main.js         Jaml.lib.charset.Unicodeクラス
+                    sanitizer/      U+0000削除（不正なバイトシーケンス、正規化の問題（ホモグラフ攻撃））
+                        src/
+                            main.js
+                    normalizer/     str.normalize('NFC')    CJK統合漢字問題と絡む
+                        src/
+                            main.js
+                    localizer/      各国・言語用
+                        ja/         日本語用
+                            src/
+                                regexp.js   日本語文字のみ、漢字のみ、踊り字のみ等（実際は中国語等も含まれてしまう）
+                                normalizer.js   濁点を結合文字や統合文字に変換する
+            ja16/   将来の理想的な文字セット（不要な制御コードが一切ない日本語文字セット（未作成）Unicodeが必要とするサニタイズ、正規化、ローカライズ処理が一切不要。原理上Unicode問題が発生しない専用バイナリ規格だから）
+                src/
+                    main.js         Unicodeに変換する
+        text/                       テキスト固有問題担当（改行コードなどの統一化）
+            core/
+                main.js             Textクラス。charset, count(原稿), getIndex(row,col), getRowCol(indent), getIndent(line)（文字種と数）
+                word/                   印字可能文字のみの配列（空白・制御一切なし）
+                    src/
+                        main.js         WordTextクラス。
+                unit/                   word+水平区切       （gridで使われる場合がほとんどのはず）
+                    src/
+                        main.js         UnitTextクラス。
+                line/                   word or unit        （一行だけの文字列）
+                    src/
+                        main.js         LineTextクラス。
+                list/                   line + 改行コード   （普通のテキストファイルがこれ）
+                    src/
+                        main.js         ListTextクラス。
+                grid/                   list + unit         （CSVやTSV）
+                    src/
+                        main.js         GridTextクラス。
+                tree/                   list + インデントコード（ディレクトリ構造、アウトライン、Pythonコード等）
+                    src/
+                        main.js         TreeTextクラス。
+            super/
+                jaml/
+                    src/
+                        main.js     count()は複雑なオプションで計算する（メタ文字を除外した数など）
+                html/
+        fence/                      Fenceの字句解析やFenceContextなどフェンス固有の複雑な部分をここで実装できる？
+            src/
+                core/           基底クラス (FenceRule, FenceNode)
+                    rule.js
+                    node.js
+                rules/          具体的なフェンスルール
+                    backquote.js
+                    quote.js
+        block/                      パラグラフや見出しなど二連続改行により抽出できるブロックASTを返す
+            src/
+                core/   基底クラス (BlockRule, BlockNode)
+                    rule.js
+                    node.js
+                rules/          具体的なブロックルール
+                    heading.js
+                    paragraph.js
+                    hr.js
+                    part.js
+                    paging.js
+        inline/                     ルビなどインライン要素のASTを返す
+            src/
+                core/   基底クラス (InlineRule, InlineNode)
+                    rule.js
+                    node.js
+                rules/
+                    ruby.js
+                    em.js
+                    a.js
+        grammar/                    ユーザによる文法の作成・拡張・修正（標準のblockやinlineの修正や新規増設等）
+            src/
+                main.js         GrammarRegistryクラス
+                presets/        標準プリセット
+                    jaml.js     Jaml標準のルールセット
+                    markdown.js Markdown互換セット
+        document/                   grammarを初期定義する（Jaml(Default), Markdown(Common/GFM), 小説(カクヨム,なろう等)）
+            src/
+                core/           Documentクラス (ASTのルート)
+                    main.js
+                super/          具体的な文書クラス
+                    jaml.js     JamlDocument (Jamlプリセットを使用)
+        parser/
+            src/
+                main.js         Parserクラス
+                tokenizer/      汎用Tokenizer (Grammarを受け取って分解)
+                lexer/          汎用Lexer (Token列からAST構築)
+        converter/          JamlのASTから各種形式のテキストに変換する
+            html/
+                src/
+                    main.js     今回はこれだけ実装して他は実装対象外
+            markdown/
+                src/
+                    main.js
+            asciidoc/
+                src/
+                    main.js
+            tei-lite/
+                src/
+                    main.js
+            novel/
+                aozora/
+                    src/
+                        main.js
+                kakuyomu/
+                    src/
+                        main.js
+                narou/
+                    src/
+                        main.js
+                alpha-police/
+                    src/
+                        main.js
+        page/           物理分割 Document継承。改ページのコードを実装する。
+            src/
+                main.js     Pageクラス。Documentクラス継承。
+                screen/     物理分割用改ページコードだけでなく、画面サイズに応じて自動折返しやページ分割する
+                    main.js 旧pager/    ScreenPageクラス
+                paper/
+                    main.js 綴じ方に応じたページ分割をする（製本する時に使う）  PaperPageクラス
+                super/
+                    jaml/
+                        src/
+                            page.js     JamlPageクラス。JamlDoc継承。
+                            screen.js   JamlScreenPageクラス。JamlPage継承。
+                            paper.js    JamlPaperPageクラス。JamlPage継承。
+        linter/
+        puller/
+        subscriber/
+        pusher/
+        publisher/
+        printer/
+        proofreader/
+    ui/
+        viewer/
+        editor/
+        uploader/
+        downloader/
+    app/
+        linter/
+        printer/
+        proofreader/
+        reader/
+        writer/
+        looker/
+        publisher/

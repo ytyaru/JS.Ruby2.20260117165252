@@ -1,0 +1,14 @@
+# Jaml Core Text
+
+テキスト処理の基底クラスを提供します。
+
+## Usage
+
+```javascript
+import { Text } from './dist/main.js';
+
+const raw = "Line1\r\nLine2";
+const text = new Text(raw);
+
+console.log(text.content); // "Line1\nLine2" (Normalized to LF)
+console.log(text.getRowCol(6)); // [1, 0]

@@ -1,0 +1,176 @@
+jaml/
+    api/                エンドユーザ参照用API (Jaml.to 等)
+        dist/
+        test/
+        src/
+            main.js
+        README.md
+        build.sh
+        test.sh
+    core/               Jamlの中核機能 (依存なし)
+        error/
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     JamlErrorクラス
+        charset/            文字コード処理
+            unicode/
+                build.sh
+                test.sh
+                dist/
+                    bundle.js
+                test/
+                    main.js
+                src/
+                    main.js         UnicodeContext
+                    sanitizer/      
+                        src/
+                            main.js
+                    normalizer/     
+                        src/
+                            main.js
+                    localizer/      
+                        ja/         
+                            src/
+                                regexp.js
+                                normalizer.js
+            ja16/           将来用
+                src/
+                    main.js
+        text/               テキスト処理基盤
+            core/
+                main.js             Textクラス
+                word/
+                    test/
+                        main.js
+                    src/
+                        main.js     WordText
+                unit/
+                    src/
+                        main.js     UnitText
+                line/
+                    src/
+                        main.js     LineText
+                list/
+                    src/
+                        main.js     ListText
+                grid/
+                    src/
+                        main.js     GridText
+                tree/
+                    src/
+                        main.js     TreeText
+            super/
+                jaml/
+                    src/
+                        main.js
+                html/
+        fence/              フェンスブロック定義
+            src/
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    backquote.js
+                    quote.js
+        block/              ブロック要素定義
+            src/
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    heading.js
+                    paragraph.js
+                    hr.js
+                    part.js
+                    paging.js
+        inline/             インライン要素定義
+            src/
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    ruby.js
+                    em.js
+                    a.js
+        grammar/            構文ルール管理
+            src/
+                main.js     GrammarRegistry
+                presets/
+                    jaml.js
+                    markdown.js
+        document/           文書モデル定義
+            src/
+                core/       Documentクラス
+                    main.js
+                super/
+                    jaml.js
+        parser/             解析エンジン (Engine)
+            src/
+                main.js     CoreParser
+                tokenizer/  汎用Tokenizer
+                lexer/      汎用Lexer
+        converter/          出力変換 (Core: Jaml -> HTML)
+            html/
+                src/
+                    main.js
+        page/               物理分割
+            src/
+                main.js     Pageクラス
+                screen/
+                    main.js
+                paper/
+                    main.js
+                super/
+                    jaml/
+                        src/
+                            page.js
+                            screen.js
+                            paper.js
+    lib/                周辺ツール・拡張機能 (Coreに依存)
+        parser/             多形式対応パーサ (Facade)
+            src/
+                main.js     UnifiedParser ({in:'markdown', out:'html'})
+                html/       HTML -> Jaml AST
+                    src/
+                        main.js
+                markdown/   Markdown -> Jaml AST (Core Engine利用)
+                    src/
+                        main.js
+                novel/      小説形式 -> Jaml AST
+                    kakuyomu/
+                        src/
+                            main.js
+                    narou/
+                        src/
+                            main.js
+                    alpha-police/
+                        src/
+                            main.js
+        converter/          多形式対応コンバータ (Facade)
+            src/
+                main.js     UnifiedConverter
+        linter/
+        puller/
+        subscriber/
+        pusher/
+        publisher/
+        printer/
+        proofreader/
+    ui/
+        viewer/
+        editor/
+        uploader/
+        downloader/
+    app/
+        linter/
+        printer/
+        proofreader/
+        reader/
+        writer/
+        looker/
+        publisher/

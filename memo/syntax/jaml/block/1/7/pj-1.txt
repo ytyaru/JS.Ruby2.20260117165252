@@ -1,0 +1,193 @@
+jaml/
+    api/                エンドユーザ参照用API
+        dist/
+        test/
+        src/
+            main.js
+        README.md
+        build.sh
+        test.sh
+    core/
+        error/
+            README.md
+            build.sh
+            test.sh
+            dist/
+            test/
+                main.js
+            src/
+                main.js     JamlErrorクラス
+        charset/
+            unicode/                Unicode固有問題担当
+                src/
+                    main.js         Jaml.core.charset.Unicodeクラス
+                    sanitizer/      U+0000削除
+                        src/
+                            main.js
+                    normalizer/     str.normalize('NFC')
+                        src/
+                            main.js
+                    localizer/      各国・言語用
+                        ja/         日本語用
+                            src/
+                                regexp.js
+                                normalizer.js
+            ja16/   将来の理想的な文字セット
+                src/
+                    main.js
+        text/                       テキスト固有問題担当
+            core/
+                main.js             Textクラス
+                word/                   印字可能文字のみ
+                    src/
+                        main.js         WordTextクラス
+                unit/                   word+水平区切
+                    src/
+                        main.js         UnitTextクラス
+                line/                   word or unit
+                    src/
+                        main.js         LineTextクラス
+                list/                   line + 改行コード
+                    src/
+                        main.js         ListTextクラス
+                grid/                   list + unit
+                    src/
+                        main.js         GridTextクラス
+                tree/                   list + インデントコード
+                    src/
+                        main.js         TreeTextクラス
+            super/
+                jaml/
+                    src/
+                        main.js
+                html/
+        fence/                      フェンスブロック定義
+            src/
+                core/           基底クラス
+                    rule.js
+                    node.js
+                rules/          具体的なフェンスルール
+                    backquote.js
+                    quote.js
+        block/                      ブロック要素定義
+            src/
+                core/           基底クラス
+                    rule.js
+                    node.js
+                rules/          具体的なブロックルール
+                    heading.js
+                    paragraph.js
+                    hr.js
+                    part.js
+                    paging.js
+        inline/                     インライン要素定義
+            src/
+                core/           基底クラス
+                    rule.js
+                    node.js
+                rules/          具体的なインラインルール
+                    ruby.js
+                    em.js
+                    a.js
+        grammar/                    構文ルール管理
+            src/
+                main.js         GrammarRegistryクラス
+                presets/        標準プリセット
+                    jaml.js
+                    markdown.js
+        document/                   文書モデル定義
+            src/
+                core/           Documentクラス
+                    main.js
+                super/          具体的な文書クラス
+                    jaml.js
+        parser/                     解析エンジン
+            src/
+                main.js         Parserクラス
+                tokenizer/      汎用Tokenizer
+                lexer/          汎用Lexer
+        converter/                  出力変換
+            html/
+                src/
+                    main.js
+            markdown/
+                src/
+                    main.js
+            asciidoc/
+                src/
+                    main.js
+            tei-lite/
+                src/
+                    main.js
+            novel/
+                aozora/
+                    src/
+                        main.js
+                kakuyomu/
+                    src/
+                        main.js
+                narou/
+                    src/
+                        main.js
+                alpha-police/
+                    src/
+                        main.js
+        page/                       物理分割
+            src/
+                main.js     Pageクラス
+                screen/
+                    main.js ScreenPageクラス
+                paper/
+                    main.js PaperPageクラス
+                super/
+                    jaml/
+                        src/
+                            page.js
+                            screen.js
+                            paper.js
+    lib/
+        parser/                 各種形式テキストからASTを返す
+            main.js             new jaml.lib.Parser({in:'jaml', out:'html'})
+            jaml/               core/parser/で実装済み
+            html/               HTMLの構文木を作る（Jaml等に変換するために）
+                src/
+                    main.js         HtmlParserクラス(HTMLはブロック構造じゃないからcore/grammarは使えない？)
+            markdown/               ブロック構造とほぼ同じだからGrammarを使える？
+                src/
+                    main.js         MarkdownParserクラス
+                    tokenizer/      汎用Tokenizer (Grammarを受け取って分解)
+                    lexer/          汎用Lexer (Token列からAST構築)
+            novel/
+                kakuyomu/           ブロック構造とほぼ同じだからGrammarを使える
+                    src/
+                        main.js         KakuyomuParserクラス
+                        tokenizer/      汎用Tokenizer (Grammarを受け取って分解)
+                        lexer/          汎用Lexer (Token列からAST構築)
+                narou/
+                    %../kakuyomu/%
+                alpha-police/
+                    %../kakuyomu/%
+        converter/      これも必要になるはず。逆パーサも可能にするために。
+            src/
+                main.js     入出力の形式はoptionsで設定:`to(ast,opt)`, 出力型指定:`toJaml(ast,opt)`, 入力型指定:`fromHtml(ast,opt)`
+
+        linter/
+        puller/
+        subscriber/
+        pusher/
+        publisher/
+        printer/
+        proofreader/
+    ui/
+        viewer/
+        editor/
+        uploader/
+        downloader/
+    app/
+        linter/
+        printer/
+        proofreader/
+        reader/
+        writer/
+        looker/
+        publisher/
