@@ -1,6 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")"
-echo "Running tests in core/text/core..."
+echo "Running tests in $(basename $(pwd))..."
 if [ -z "$1" ]; then
     bun test ./test/main.js
 else
