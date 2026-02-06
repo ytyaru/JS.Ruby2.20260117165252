@@ -1,9 +1,5 @@
-export class FenceNode {
-    constructor(type, location, props = {}) {
-        this.type = type;
-        this.location = location;
-        this.props = props;
-        this.content = []; // フェンス内部の行データ
-    }
-}
+import { GrammarNode } from '../../../grammar/src/core/node.js';
 
+export class FenceNode extends GrammarNode {
+    // children には行データや、ネストされたブロックが入る
+}

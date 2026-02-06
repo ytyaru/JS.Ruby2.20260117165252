@@ -51,60 +51,60 @@ jaml/
                     main.js
                 src/
                     main.js         Textクラス
-                word/
-                    README.md
-                    build.sh
-                    test.sh
-                    dist/
-                    test/
-                        main.js
-                    src/
-                        main.js     WordText
-                unit/
-                    README.md
-                    build.sh
-                    test.sh
-                    dist/
-                    test/
-                        main.js
-                    src/
-                        main.js     UnitText
-                line/
-                    README.md
-                    build.sh
-                    test.sh
-                    dist/
-                    test/
-                        main.js
-                    src/
-                        main.js     LineText
-                list/
-                    README.md
-                    build.sh
-                    test.sh
-                    dist/
-                    test/
-                        main.js
-                    src/
-                        main.js     ListText
-                grid/
-                    README.md
-                    build.sh
-                    test.sh
-                    dist/
-                    test/
-                        main.js
-                    src/
-                        main.js     GridText
-                tree/
-                    README.md
-                    build.sh
-                    test.sh
-                    dist/
-                    test/
-                        main.js
-                    src/
-                        main.js     TreeText
+            word/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js     WordText
+            unit/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js     UnitText
+            line/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js     LineText
+            list/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js     ListText
+            grid/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js     GridText
+            tree/
+                README.md
+                build.sh
+                test.sh
+                dist/
+                test/
+                    main.js
+                src/
+                    main.js     TreeText
             super/
                 jaml/
                     README.md
@@ -170,7 +170,10 @@ jaml/
             test/
                 main.js
             src/
-                main.js     GrammarRegistry
+                core/           ★追加: 基底クラス
+                    rule.js
+                    node.js
+                main.js         GrammarRegistry
                 presets/
                     jaml.js
                     markdown.js

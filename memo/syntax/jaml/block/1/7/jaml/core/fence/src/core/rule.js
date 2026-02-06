@@ -1,11 +1,4 @@
-export class FenceRule {
-    constructor(name, pattern) {
-        this.name = name;
-        this.pattern = pattern;
-    }
+import { GrammarRule } from '../../../grammar/src/core/rule.js';
 
-    match(line) {
-        return line.match(this.pattern);
-    }
+export class FenceRule extends GrammarRule {
 }
-

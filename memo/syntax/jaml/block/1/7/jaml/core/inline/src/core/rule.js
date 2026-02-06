@@ -1,11 +1,4 @@
-export class InlineRule {
-    constructor(name, pattern) {
-        this.name = name;
-        this.pattern = pattern;
-    }
+import { GrammarRule } from '../../../grammar/src/core/rule.js';
 
-    match(text) {
-        return text.match(this.pattern);
-    }
+export class InlineRule extends GrammarRule {
 }
-

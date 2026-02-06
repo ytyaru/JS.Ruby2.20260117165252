@@ -144,9 +144,9 @@ jaml/
                 rules/
                     heading.js
                     paragraph.js
-                    thematic-break.js   旧hr.js
+                    hr.js
                     part.js
-                    page-break.js       旧paging.js
+                    paging.js
         inline/             インライン要素定義
             README.md
             build.sh
@@ -170,10 +170,7 @@ jaml/
             test/
                 main.js
             src/
-                core/           ★追加: 基底クラス
-                    rule.js
-                    node.js
-                main.js         GrammarRegistry
+                main.js     GrammarRegistry
                 presets/
                     jaml.js
                     markdown.js
