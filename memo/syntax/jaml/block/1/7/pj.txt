@@ -136,7 +136,15 @@ jaml/
             test.sh
             dist/
             test/
-                main.js
+                core/
+                    rule.js
+                    node.js
+                rules/
+                    heading.js
+                    paragraph.js
+                    thematic-break.js   旧hr.js
+                    part.js
+                    page-break.js       旧paging.js
             src/
                 core/
                     rule.js
