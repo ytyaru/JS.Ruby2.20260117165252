@@ -1,4 +1,4 @@
-import { JamlError } from '../../../../../../error/src/main.js';
+import { JamlError } from '../../../../../error/src/main.js';
 /**
  * 文字種カテゴリの基底クラス。
  * 配列の配列形式による順序保持、厳格な命名規則（大文字スネークケース）の強制、
@@ -172,7 +172,7 @@ const JA_NAMESPACE = Object.freeze({
     KANSUJI: KANSUJI,
     SEMI_KANJI: SEMI_KANJI,
     SYMBOL: SYMBOL,
-    OTHER: OTHER_JA
+    OTHER: OTHER,
 });
 /**
  * 日本語の文字集合に関連する正規表現を統括するファサードクラス。

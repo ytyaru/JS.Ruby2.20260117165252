@@ -40,6 +40,22 @@ jaml/
             super/
                 jaml/
                 html/
+        grammar/            # 構文ルール管理
+            README.md
+            build.sh +x
+            test.sh +x
+            dist/
+                bundle.js
+            test/
+                %../src/%
+            src/
+                main.js
+                core/
+                    rule.js
+                    node.js
+                presets/
+                    jaml.js
+                    markdown.js
         fence/              # フェンスブロック定義
             README.md
             build.sh +x
@@ -49,9 +65,14 @@ jaml/
             test/
                 %../src/%
             src/
+                main.js
                 core/
                     rule.js
                     node.js
+                super/
+                    %../rules/%
+                nodes/
+                    %../rules/%
                 rules/
                     exclamation.js
                     quote.js
@@ -81,16 +102,21 @@ jaml/
             test/
                 %../src/%
             src/
-                core/
+                main.js         全super/を公開するファサード
+                core/           基底クラス
                     rule.js
                     node.js
-                rules/
+                super/          個別インポート用（Node + Rule）
+                    %../rules/%
+                nodes/          データ定義
+                    %../rules/%
+                rules/          ロジック定義
                     heading.js
                     paragraph.js
                     thematic-break.js
                     part.js
                     page-break.js
-        inline/             # インライン要素定義
+        inline/             インライン要素定義
             README.md
             build.sh +x
             test.sh +x
@@ -99,29 +125,18 @@ jaml/
             test/
                 %../src/%
             src/
+                main.js
                 core/
                     rule.js
                     node.js
+                super/
+                    %../rules/%
+                nodes/
+                    %../rules/%
                 rules/
                     ruby.js
                     em.js
                     a.js
-        grammar/            # 構文ルール管理
-            README.md
-            build.sh +x
-            test.sh +x
-            dist/
-                bundle.js
-            test/
-                %../src/%
-            src/
-                core/
-                    rule.js
-                    node.js
-                main.js
-                presets/
-                    jaml.js
-                    markdown.js
         document/           # 文書モデル定義
             README.md
             build.sh +x
