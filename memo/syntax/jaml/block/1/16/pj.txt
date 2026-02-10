@@ -1,0 +1,230 @@
+---
+README.md
+build.sh +x
+test.sh +x
+dist/
+    bundle.js
+test/
+    main.js
+src/
+    main.js
+---
+jaml/
+    api/
+    core/
+        error/
+        charset/
+            unicode/
+                api/
+                sanitizer/
+                normalizer/
+                regexp/
+                    ja/
+            ja16/
+        culture/
+            api/    ファザード
+            country/    国
+                jp/     日本（言語選択。候補一覧。`['ja']`）
+            lang/       言語
+                ja/     日本語
+                    normalizer/
+                    sanitizer/
+        text/               # テキスト処理基盤
+            core/
+            word/
+            unit/
+            line/
+            list/
+            grid/
+            tree/
+            super/
+                jaml/
+                html/
+        syntax/
+            grammar/            # 構文ルール管理
+                README.md
+                build.sh +x
+                test.sh +x
+                dist/
+                    bundle.js
+                test/
+                    %../src/%
+                src/
+                    main.js
+                    core/
+                        rule.js
+                        node.js
+                    presets/
+                        jaml.js
+                        markdown.js
+            fence/              # フェンスブロック定義
+                README.md
+                build.sh +x
+                test.sh +x
+                dist/
+                    bundle.js
+                test/
+                    %../src/%
+                src/
+                    main.js
+                    core/
+                        rule.js
+                        node.js
+                    super/
+                        %../rules/%
+                    nodes/
+                        %../rules/%
+                    rules/
+                        exclamation.js
+                        quote.js
+                        number.js
+                        dollar.js
+                        percent.js
+                        ampersand.js
+                        apostrophe.js
+                        hyphen.js
+                        caret.js
+                        tilde.js
+                        at.js
+                        plus.js
+                        asterisk.js
+                        backquote.js
+                        less.js
+                        greater.js
+                        question.js
+                        slash.js
+                        backslash.js
+            block/              # ブロック要素定義
+                README.md
+                build.sh +x
+                test.sh +x
+                dist/
+                    bundle.js
+                test/
+                    %../src/%
+                src/
+                    main.js         全super/を公開するファサード
+                    core/           基底クラス
+                        rule.js
+                        node.js
+                    super/          個別インポート用（Node + Rule）
+                        %../rules/%
+                    nodes/          データ定義
+                        %../rules/%
+                    rules/          ロジック定義
+                        heading.js
+                        paragraph.js
+                        thematic-break.js
+                        part.js
+                        page-break.js
+            inline/             インライン要素定義
+                README.md
+                build.sh +x
+                test.sh +x
+                dist/
+                    bundle.js
+                test/
+                    %../src/%
+                src/
+                    main.js
+                    core/
+                        rule.js
+                        node.js
+                    super/
+                        %../rules/%
+                    nodes/
+                        %../rules/%
+                    rules/
+                        ruby.js
+                        em.js
+                        a.js
+        document/           # 文書モデル定義
+            README.md
+            build.sh +x
+            test.sh +x
+            dist/
+                bundle.js
+            test/
+                %../src/%
+            src/
+                core/
+                    main.js
+                super/
+                    jaml.js
+        parser/             # 解析エンジン
+            README.md
+            build.sh +x
+            test.sh +x
+            dist/
+                bundle.js
+            test/
+                %../src/%
+            src/
+                main.js
+                tokenizer/
+                lexer/
+        converter/          # 出力変換 (Core: Jaml -> HTML)
+            api/
+            core/
+                html/
+                markdown/
+                asciidoc/
+                tei-lite/
+                novel/
+                    aozora/
+                    kakuyomu/
+                    narou/
+                    alpha-police/
+        layout/                 # (旧 page/) CSSのうちレイアウトに関するものを中心に？
+            api/                super/のheading,screen,paperを参照するファザード
+            core/
+                api/            # 以下レイアウト関係の機能すべてまとめたファザード
+                page/           # ページ単位を作成する（margin, padding, line-height, letter-spacing, ...）
+                font/           # ページ単位を作成するために必要な最も基本的な部分（family, size, ...）
+                column/         # 段組み（column-count, column-gap, column-width, ...）
+                writing-mode/   # 書字方向（縦書き／横書き。text-orientation, text-combine-upright:all;）
+            super/
+                heading/            # 見出し単位でページ分割する
+                    %../../core/%
+                screen/             # 画面サイズや一行あたりの字数等でページ分割する
+                    %../../core/%
+                paper/              # 紙面サイズや綴じ方でページ分割する
+                    %../../core/%
+                    binding/        # 綴じ方
+                        side-staple/    # 平綴じ
+                        saddle/         # 中綴じ
+                        perfect/        # 無線綴じ
+
+    lib/                # 周辺ツール・拡張機能
+        parser/             # 多形式対応パーサ
+            html/
+            markdown/
+            asciidoc/
+            tei-lite/
+            novel/
+                aozora/
+                kakuyomu/
+                narou/
+                alpha-police/
+        converter/          # 多形式対応コンバータ
+        linter/0
+        puller/0
+        subscriber/0
+        pusher/0
+        publisher/0
+        printer/0
+        proofreader/0
+    ui/
+        viewer/0
+        editor/0
+        uploader/0
+        downloader/0
+    app/
+        linter/0
+        printer/0
+        proofreader/0
+        reader/0
+        writer/0
+        looker/0
+        publisher/0
+
